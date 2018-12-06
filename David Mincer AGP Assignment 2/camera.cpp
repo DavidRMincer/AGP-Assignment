@@ -22,21 +22,6 @@ camera::camera(float x, float y, float z, float rotation)
 	updateDifference();
 }
 
-float camera::getMoveSpeed(void)
-{
-	return m_moveSpeed;
-}
-
-float camera::getRotateSpeed(void)
-{
-	return m_rotateSpeed;
-}
-
-float camera::getJumpSpeed(void)
-{
-	return m_jumpSpeed;
-}
-
 void camera::Rotate(float degrees)
 {
 	m_cameraRotation += degrees;
@@ -63,9 +48,9 @@ void camera::Up(float distance)
 	m_y += distance;
 }
 
-void camera::Jump(void)
+void camera::Jump(float force)
 {
-	m_jumpVelocity = m_jumpSpeed;
+	m_jumpVelocity = force;
 	m_jumping = true;
 }
 

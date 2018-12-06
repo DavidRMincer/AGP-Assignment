@@ -16,10 +16,7 @@ private:
 		m_dy = 0.0f,
 		m_dz,
 		m_cameraRotation,
-		m_jumpVelocity,
-		m_moveSpeed = 0.8f,
-		m_rotateSpeed = 1.0f,
-		m_jumpSpeed = 0.012f;
+		m_jumpVelocity;
 	XMVECTOR m_position,
 		m_lookat,
 		m_up;
@@ -28,14 +25,11 @@ private:
 public:
 	camera();
 	camera(float x, float y, float z, float rotation);
-	float getMoveSpeed(void);
-	float getRotateSpeed(void);
-	float getJumpSpeed(void);
 	void Rotate(float degrees);
 	void Forward(float distance);
 	void Strafe(float distance);
 	void Up(float distance);
-	void Jump(void);
+	void Jump(float force);
 	void UpdateVelocity(float gravity, float floor);
 	void Pitch(float degrees);
 	bool isJumping(void);

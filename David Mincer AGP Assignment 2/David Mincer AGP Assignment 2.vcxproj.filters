@@ -24,9 +24,6 @@
     <ClCompile Include="text2D.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="gameManager.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="shaders.hlsl" />
@@ -37,9 +34,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="text2D.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="gameManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
