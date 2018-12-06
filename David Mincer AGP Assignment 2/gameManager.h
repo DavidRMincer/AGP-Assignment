@@ -39,6 +39,8 @@ char		g_WindowName[100] = "Fiery Facial\0";
 class gameManager
 {
 private:
+	HINSTANCE					m_hInst = NULL;
+	HWND						m_hWnd = NULL;
 	D3D_DRIVER_TYPE				m_driverType = D3D_DRIVER_TYPE_NULL;
 	D3D_FEATURE_LEVEL			m_featureLevel = D3D_FEATURE_LEVEL_11_0;
 	ID3D11Device*				m_pD3DDevice = NULL;
@@ -67,8 +69,6 @@ private:
 public:
 
 	gameManager();
-	int RunGameLoop(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow);
-	HRESULT InitialiseD3D();
 	void ShutdownD3D();
 	HRESULT InitialiseGraphics();
 	void ApplyGravity(void);
