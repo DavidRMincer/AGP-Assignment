@@ -589,7 +589,7 @@ void RenderFrame(void)
 		world,
 		view = g_pCamera->GetViewMatrix();
 
-	g_directional_light_shines_from = XMVectorSet(0.0f, 10.0f, 0.0f, 1.0f);
+	g_directional_light_shines_from = XMVectorSet(10.0f, 10.0f, 0.0f, 1.0f);
 	g_directional_light_colour = XMVectorSet(1.0f, 1.0f, 1.0f, 1.0f);
 	g_ambient_light_colour = XMVectorSet(0.2f, 0.2f, 0.2f, 1.0f);
 
