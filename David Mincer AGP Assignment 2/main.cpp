@@ -7,6 +7,7 @@
 #define _XM_NO_INTRINSICS_
 #define XM_NO_ALIGNMENT
 #include <xnamath.h>
+#include <dinput.h>
 #include "camera.h"
 #include "text2D.h"
 
@@ -27,6 +28,9 @@ ID3D11VertexShader*			g_pVertexShader;
 ID3D11PixelShader*			g_pPixelShader;
 ID3D11InputLayout*			g_pInputLayout;
 ID3D11DepthStencilView*		g_pZBuffer;
+IDirectInput8*				g_direct_input;
+IDirectInputDevice8*		g_keyboard_device;
+unsigned char				g_keyboard_keys_state[256];
 camera*						g_pCamera;
 ID3D11ShaderResourceView*	g_pTexture0;
 ID3D11SamplerState*			g_pSampler0;
@@ -76,8 +80,10 @@ HRESULT InitialiseWindow(HINSTANCE hInstance, int nCmdShow);
 LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
 HRESULT InitialiseD3D();
 HRESULT InitialiseGraphics(void);
+HRESULT InitInput(void);
 void ShutdownD3D();
 void RenderFrame(void);
+void ReadInputStates();
 
 
 //////////////////////////////////////////////////////////////////////////////////////
@@ -90,6 +96,12 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	UNREFERENCED_PARAMETER(lpCmdLine);
 
 	if (FAILED(InitialiseWindow(hInstance, nCmdShow)))
+	{
+		DXTRACE_MSG("Failed to create Window");
+		return 0;
+	}
+
+	if (FAILED(InitInput()))
 	{
 		DXTRACE_MSG("Failed to create Window");
 		return 0;
@@ -581,10 +593,46 @@ HRESULT InitialiseGraphics()
 }
 
 //////////////////////////////////////////////////////////////////////////////////////
+//Initialise input
+//////////////////////////////////////////////////////////////////////////////////////
+HRESULT InitInput(void)
+{
+	HRESULT hr;
+
+	ZeroMemory(g_keyboard_keys_state, sizeof(g_keyboard_keys_state));
+
+	hr = DirectInput8Create(
+		g_hInst,
+		DIRECTINPUT_VERSION,
+		IID_IDirectInput8,
+		(void**)&g_direct_input,
+		NULL);
+	if (FAILED(hr)) return hr;
+
+	hr = g_direct_input->CreateDevice(GUID_SysKeyboard, &g_keyboard_device, NULL);
+	if (FAILED(hr)) return hr;
+
+	hr = g_keyboard_device->SetDataFormat(&c_dfDIKeyboard);
+	if (FAILED(hr)) return hr;
+
+	hr = g_keyboard_device->SetCooperativeLevel(
+		g_hWnd,
+		DISCL_FOREGROUND | DISCL_NONEXCLUSIVE);
+	if (FAILED(hr)) return hr;
+
+	hr = g_keyboard_device->Acquire();
+	if (FAILED(hr)) return hr;
+
+	return S_OK;
+}
+
+//////////////////////////////////////////////////////////////////////////////////////
 // Render frame
 //////////////////////////////////////////////////////////////////////////////////////
 void RenderFrame(void)
 {
+	ReadInputStates();
+
 	XMMATRIX projection,
 		world,
 		view = g_pCamera->GetViewMatrix();
@@ -692,3 +740,18 @@ void RenderFrame(void)
 
 	degrees += 0.0001;
 }
+
+void ReadInputStates()
+{
+	HRESULT hr;
+
+	hr = g_keyboard_device->GetDeviceState(
+		sizeof(g_keyboard_keys_state),
+		(LPVOID)&g_keyboard_keys_state);
+
+	if (FAILED(hr))
+	{
+		if ((hr == DIERR_INPUTLOST) || (hr == DIERR_NOTACQUIRED)) g_keyboard_device->Acquire();
+	}
+}
+
