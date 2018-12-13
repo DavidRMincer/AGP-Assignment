@@ -16,7 +16,10 @@ private:
 		m_dy = 0.0f,
 		m_dz,
 		m_cameraRotation,
-		m_jumpVelocity;
+		m_jumpVelocity,
+		m_walkSpeed,
+		m_rotationSpeed,
+		m_jumpSpeed;
 	XMVECTOR m_position,
 		m_lookat,
 		m_up;
@@ -24,15 +27,17 @@ private:
 	void updateDifference();
 public:
 	camera();
-	camera(float x, float y, float z, float rotation);
+	camera(float x, float y, float z, float rotation,
+		float walkSpeed, float rotationSpeed, float jumpSpeed);
 	void Rotate(float degrees);
-	void Forward(float distance);
-	void Strafe(float distance);
+	void Forward(void);
+	void Backward(void);
+	void StrafeLeft(void);
+	void StrafeRight(void);
 	void Up(float distance);
-	void Jump(float force);
+	void Jump();
 	void UpdateVelocity(float gravity, float floor);
 	void Pitch(float degrees);
-	bool isJumping(void);
 	XMMATRIX GetViewMatrix();
 	~camera();
 };

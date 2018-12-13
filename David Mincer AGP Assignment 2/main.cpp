@@ -43,10 +43,7 @@ float redStuff = 1.0f,
 scaling = 1.0f,
 degrees = 15.0f,
 cube1Z = 10.0f,
-camMoveSpeed = 0.8f,
-camRotateSpeed = 1.0f,
 gravity = 0.000005f,
-camJumpSpeed = 0.012f,
 lightZ = 45.0f;
 const int CONSTANT_BUFFER_SIZE = 112;
 
@@ -83,7 +80,9 @@ HRESULT InitialiseGraphics(void);
 HRESULT InitInput(void);
 void ShutdownD3D();
 void RenderFrame(void);
-void ReadInputStates();
+void ReadInputStates(void);
+void UpdateLogic(void);
+bool IsKeyPressed(unsigned char DI_keycode);
 
 
 //////////////////////////////////////////////////////////////////////////////////////
@@ -131,7 +130,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		}
 		else
 		{
-			g_pCamera->UpdateVelocity(gravity, 0.0f);
+			UpdateLogic();
 			RenderFrame();
 		}
 	}
@@ -195,61 +194,61 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		PostQuitMessage(0);
 		break;
 
-	case WM_KEYDOWN:
-		switch (wParam)
-		{
-		case VK_ESCAPE:
-			DestroyWindow(g_hWnd);
-			break;
+	//case WM_KEYDOWN:
+	//	switch (wParam)
+	//	{
+	//	case VK_ESCAPE:
+	//		DestroyWindow(g_hWnd);
+	//		break;
 
-		// W Key
-		case 0x57:
-			g_pCamera->Forward(camMoveSpeed);
-			break;
+	//	// W Key
+	//	case 0x57:
+	//		g_pCamera->Forward(camMoveSpeed);
+	//		break;
 
-		// S Key
-		case 0x53:
-			g_pCamera->Forward(-camMoveSpeed);
-			break;
+	//	// S Key
+	//	case 0x53:
+	//		g_pCamera->Forward(-camMoveSpeed);
+	//		break;
 
-		// A Key
-		case 0x41:
-			g_pCamera->Strafe(-camMoveSpeed);
-			break;
+	//	// A Key
+	//	case 0x41:
+	//		g_pCamera->Strafe(-camMoveSpeed);
+	//		break;
 
-		// D Key
-		case 0x44:
-			g_pCamera->Strafe(camMoveSpeed);
-			break;
+	//	// D Key
+	//	case 0x44:
+	//		g_pCamera->Strafe(camMoveSpeed);
+	//		break;
 
-		// LEFT Key
-		case VK_LEFT:
-			g_pCamera->Rotate(-camRotateSpeed);
-			break;
+	//	// LEFT Key
+	//	case VK_LEFT:
+	//		g_pCamera->Rotate(-camRotateSpeed);
+	//		break;
 
-		// RIGHT Key
-		case VK_RIGHT:
-			g_pCamera->Rotate(camRotateSpeed);
-			break;
+	//	// RIGHT Key
+	//	case VK_RIGHT:
+	//		g_pCamera->Rotate(camRotateSpeed);
+	//		break;
 
-		// UP Key
-		case VK_UP:
-			g_pCamera->Pitch(camRotateSpeed);
-			break;
+	//	// UP Key
+	//	case VK_UP:
+	//		g_pCamera->Pitch(camRotateSpeed);
+	//		break;
 
-		// DOWN Key
-		case VK_DOWN:
-			g_pCamera->Pitch(-camRotateSpeed);
-			break;
+	//	// DOWN Key
+	//	case VK_DOWN:
+	//		g_pCamera->Pitch(-camRotateSpeed);
+	//		break;
 
-		// SPACE Key
-		case VK_SPACE:
-			if (!g_pCamera->isJumping()) g_pCamera->Jump(camJumpSpeed);
-			break;
+	//	// SPACE Key
+	//	case VK_SPACE:
+	//		if (!g_pCamera->isJumping()) g_pCamera->Jump(camJumpSpeed);
+	//		break;
 
-		default:
-			break;
-		}
+	//	default:
+	//		break;
+	//	}
 		return 0;
 
 	default:
@@ -388,6 +387,14 @@ HRESULT InitialiseD3D()
 //////////////////////////////////////////////////////////////////////////////////////
 void ShutdownD3D()
 {
+	if (g_keyboard_device)
+	{
+		g_keyboard_device->Unacquire();
+		g_keyboard_device->Release();
+	}
+
+	if (g_direct_input) g_direct_input->Release();
+
 	if (g_2DText)
 	{
 		g_2DText = NULL;
@@ -577,7 +584,7 @@ HRESULT InitialiseGraphics()
 
 	g_pImmediateContext->IASetInputLayout(g_pInputLayout);
 
-	g_pCamera = new camera(0.0f, 0.0f, 0.0f, 0.0f);
+	g_pCamera = new camera(0.0f, 0.0f, 0.0f, 0.0f, 0.002f, 1.0f, 0.010f);
 
 	D3D11_SAMPLER_DESC sampler_desc;
 	ZeroMemory(&sampler_desc, sizeof(sampler_desc));
@@ -741,7 +748,10 @@ void RenderFrame(void)
 	degrees += 0.0001;
 }
 
-void ReadInputStates()
+//////////////////////////////////////////////////////////////////////////////////////
+// Reads input states
+//////////////////////////////////////////////////////////////////////////////////////
+void ReadInputStates(void)
 {
 	HRESULT hr;
 
@@ -753,5 +763,28 @@ void ReadInputStates()
 	{
 		if ((hr == DIERR_INPUTLOST) || (hr == DIERR_NOTACQUIRED)) g_keyboard_device->Acquire();
 	}
+}
+
+//////////////////////////////////////////////////////////////////////////////////////
+// Updates game logic
+//////////////////////////////////////////////////////////////////////////////////////
+void UpdateLogic(void)
+{
+	if (IsKeyPressed(DIK_ESCAPE)) DestroyWindow(g_hWnd);
+	if (IsKeyPressed(DIK_W)) g_pCamera->Forward();
+	if (IsKeyPressed(DIK_S)) g_pCamera->Backward();
+	if (IsKeyPressed(DIK_A)) g_pCamera->StrafeLeft();
+	if (IsKeyPressed(DIK_D)) g_pCamera->StrafeRight();
+	if (IsKeyPressed(DIK_SPACE)) g_pCamera->Jump();
+
+	g_pCamera->UpdateVelocity(gravity, 0.0f);
+}
+
+//////////////////////////////////////////////////////////////////////////////////////
+// Returns key pressed state
+//////////////////////////////////////////////////////////////////////////////////////
+bool IsKeyPressed(unsigned char DI_keycode)
+{
+	return g_keyboard_keys_state[DI_keycode] &0x80;
 }
 

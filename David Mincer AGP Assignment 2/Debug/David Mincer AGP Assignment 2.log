@@ -1,4 +1,4 @@
-﻿  main.cpp
+﻿  camera.cpp
 c:\program files (x86)\microsoft directx sdk (june 2010)\include\xnamath.h(2662): warning C4838: conversion from 'unsigned int' to 'INT' requires a narrowing conversion
 c:\program files (x86)\microsoft directx sdk (june 2010)\include\xnamath.h(2663): warning C4838: conversion from 'unsigned int' to 'INT' requires a narrowing conversion
 c:\program files (x86)\microsoft directx sdk (june 2010)\include\xnamath.h(2664): warning C4838: conversion from 'unsigned int' to 'INT' requires a narrowing conversion
@@ -27,8 +27,7 @@ c:\program files (x86)\microsoft directx sdk (june 2010)\include\xnamath.h(2732)
 c:\program files (x86)\microsoft directx sdk (june 2010)\include\xnamath.h(2742): warning C4838: conversion from 'unsigned int' to 'INT' requires a narrowing conversion
 c:\program files (x86)\microsoft directx sdk (june 2010)\include\xnamath.h(2743): warning C4838: conversion from 'unsigned int' to 'INT' requires a narrowing conversion
 c:\program files (x86)\microsoft directx sdk (june 2010)\include\xnamath.h(2754): warning C4838: conversion from 'unsigned int' to 'INT' requires a narrowing conversion
-  c:\program files (x86)\windows kits\10\include\10.0.16299.0\um\dinput.h: DIRECTINPUT_VERSION undefined. Defaulting to version 0x0800
-u:\documents\github\agp-assignment\david mincer agp assignment 2\main.cpp(663): warning C4305: 'argument': truncation from 'double' to 'FLOAT'
-u:\documents\github\agp-assignment\david mincer agp assignment 2\main.cpp(715): warning C4244: 'argument': conversion from 'int' to 'FLOAT', possible loss of data
-u:\documents\github\agp-assignment\david mincer agp assignment 2\main.cpp(741): warning C4305: '+=': truncation from 'double' to 'float'
+u:\documents\github\agp-assignment\david mincer agp assignment 2\camera.cpp(7): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+u:\documents\github\agp-assignment\david mincer agp assignment 2\camera.cpp(8): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+u:\documents\github\agp-assignment\david mincer agp assignment 2\camera.cpp(93): warning C4244: '+=': conversion from 'double' to 'float', possible loss of data
   David Mincer AGP Assignment 2.vcxproj -> U:\Documents\GitHub\AGP-Assignment\David Mincer AGP Assignment 2\Debug\David Mincer AGP Assignment 2.exe
