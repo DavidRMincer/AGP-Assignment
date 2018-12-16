@@ -7,9 +7,9 @@
 #define _XM_NO_INTRINSICS_
 #define XM_NO_ALIGNMENT
 #include <xnamath.h>
-#include <dinput.h>
 #include "camera.h"
 #include "text2D.h"
+#include "Input.h"
 
 //////////////////////////////////////////////////////////////////////////////////////
 //	Global Variables
@@ -28,10 +28,8 @@ ID3D11VertexShader*			g_pVertexShader;
 ID3D11PixelShader*			g_pPixelShader;
 ID3D11InputLayout*			g_pInputLayout;
 ID3D11DepthStencilView*		g_pZBuffer;
-IDirectInput8*				g_direct_input;
-IDirectInputDevice8*		g_keyboard_device;
-unsigned char				g_keyboard_keys_state[256];
 camera*						g_pCamera;
+Input*						g_pInput = new Input();
 ID3D11ShaderResourceView*	g_pTexture0;
 ID3D11SamplerState*			g_pSampler0;
 Text2D*						g_2DText;
@@ -77,12 +75,9 @@ HRESULT InitialiseWindow(HINSTANCE hInstance, int nCmdShow);
 LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
 HRESULT InitialiseD3D();
 HRESULT InitialiseGraphics(void);
-HRESULT InitInput(void);
 void ShutdownD3D();
 void RenderFrame(void);
-void ReadInputStates(void);
 void UpdateLogic(void);
-bool IsKeyPressed(unsigned char DI_keycode);
 
 
 //////////////////////////////////////////////////////////////////////////////////////
@@ -100,15 +95,15 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		return 0;
 	}
 
-	if (FAILED(InitInput()))
-	{
-		DXTRACE_MSG("Failed to create Window");
-		return 0;
-	}
-
 	if (FAILED(InitialiseD3D()))
 	{
 		DXTRACE_MSG("Failed to create Device");
+		return 0;
+	}
+
+	if (FAILED(g_pInput->InitInput(g_hInst, g_hWnd)))
+	{
+		DXTRACE_MSG("Failed to initialise graphics");
 		return 0;
 	}
 
@@ -387,13 +382,11 @@ HRESULT InitialiseD3D()
 //////////////////////////////////////////////////////////////////////////////////////
 void ShutdownD3D()
 {
-	if (g_keyboard_device)
+	if (g_pInput)
 	{
-		g_keyboard_device->Unacquire();
-		g_keyboard_device->Release();
+		g_pInput = NULL;
+		delete g_pInput;
 	}
-
-	if (g_direct_input) g_direct_input->Release();
 
 	if (g_2DText)
 	{
@@ -430,7 +423,7 @@ HRESULT InitialiseGraphics()
 
 	//Create texture
 	D3DX11CreateShaderResourceViewFromFile(g_pD3DDevice,
-		"assets/DavidTexture.jpg",
+		"assets/Rock_Tex.jpg",
 		NULL,
 		NULL,
 		&g_pTexture0,
@@ -600,45 +593,11 @@ HRESULT InitialiseGraphics()
 }
 
 //////////////////////////////////////////////////////////////////////////////////////
-//Initialise input
-//////////////////////////////////////////////////////////////////////////////////////
-HRESULT InitInput(void)
-{
-	HRESULT hr;
-
-	ZeroMemory(g_keyboard_keys_state, sizeof(g_keyboard_keys_state));
-
-	hr = DirectInput8Create(
-		g_hInst,
-		DIRECTINPUT_VERSION,
-		IID_IDirectInput8,
-		(void**)&g_direct_input,
-		NULL);
-	if (FAILED(hr)) return hr;
-
-	hr = g_direct_input->CreateDevice(GUID_SysKeyboard, &g_keyboard_device, NULL);
-	if (FAILED(hr)) return hr;
-
-	hr = g_keyboard_device->SetDataFormat(&c_dfDIKeyboard);
-	if (FAILED(hr)) return hr;
-
-	hr = g_keyboard_device->SetCooperativeLevel(
-		g_hWnd,
-		DISCL_FOREGROUND | DISCL_NONEXCLUSIVE);
-	if (FAILED(hr)) return hr;
-
-	hr = g_keyboard_device->Acquire();
-	if (FAILED(hr)) return hr;
-
-	return S_OK;
-}
-
-//////////////////////////////////////////////////////////////////////////////////////
 // Render frame
 //////////////////////////////////////////////////////////////////////////////////////
 void RenderFrame(void)
 {
-	ReadInputStates();
+	g_pInput->ReadInputStates();
 
 	XMMATRIX projection,
 		world,
@@ -749,42 +708,23 @@ void RenderFrame(void)
 }
 
 //////////////////////////////////////////////////////////////////////////////////////
-// Reads input states
-//////////////////////////////////////////////////////////////////////////////////////
-void ReadInputStates(void)
-{
-	HRESULT hr;
-
-	hr = g_keyboard_device->GetDeviceState(
-		sizeof(g_keyboard_keys_state),
-		(LPVOID)&g_keyboard_keys_state);
-
-	if (FAILED(hr))
-	{
-		if ((hr == DIERR_INPUTLOST) || (hr == DIERR_NOTACQUIRED)) g_keyboard_device->Acquire();
-	}
-}
-
-//////////////////////////////////////////////////////////////////////////////////////
 // Updates game logic
 //////////////////////////////////////////////////////////////////////////////////////
 void UpdateLogic(void)
 {
-	if (IsKeyPressed(DIK_ESCAPE)) DestroyWindow(g_hWnd);
-	if (IsKeyPressed(DIK_W)) g_pCamera->Forward();
-	if (IsKeyPressed(DIK_S)) g_pCamera->Backward();
-	if (IsKeyPressed(DIK_A)) g_pCamera->StrafeLeft();
-	if (IsKeyPressed(DIK_D)) g_pCamera->StrafeRight();
-	if (IsKeyPressed(DIK_SPACE)) g_pCamera->Jump();
+	//Get Mouse Inputs
+	g_pCamera->Rotate(g_pInput->GetHorizontalMouseInput());
+	g_pCamera->Pitch(g_pInput->GetVerticalMouseInput());
+
+	//Get Keyboard Inputs
+	if (g_pInput->IsKeyPressed(DIK_ESCAPE)) DestroyWindow(g_hWnd);
+	if (g_pInput->IsKeyPressed(DIK_W)) g_pCamera->Forward();
+	if (g_pInput->IsKeyPressed(DIK_S)) g_pCamera->Backward();
+	if (g_pInput->IsKeyPressed(DIK_A)) g_pCamera->StrafeLeft();
+	if (g_pInput->IsKeyPressed(DIK_D)) g_pCamera->StrafeRight();
+	if (g_pInput->IsKeyPressed(DIK_SPACE)) g_pCamera->Jump();
 
 	g_pCamera->UpdateVelocity(gravity, 0.0f);
 }
 
-//////////////////////////////////////////////////////////////////////////////////////
-// Returns key pressed state
-//////////////////////////////////////////////////////////////////////////////////////
-bool IsKeyPressed(unsigned char DI_keycode)
-{
-	return g_keyboard_keys_state[DI_keycode] &0x80;
-}
 

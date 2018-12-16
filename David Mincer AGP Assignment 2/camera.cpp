@@ -32,7 +32,7 @@ camera::camera(float x, float y, float z, float rotation,
 //////////////////////////////////////////////////////////////////////////////////////
 void camera::Rotate(float degrees)
 {
-	m_cameraRotation += degrees;
+	m_cameraRotation += (degrees * m_rotationSpeed);
 	updateDifference();
 }
 
@@ -114,7 +114,7 @@ void camera::UpdateVelocity(float gravity, float floor)
 //////////////////////////////////////////////////////////////////////////////////////
 void camera::Pitch(float degrees)
 {
-	m_dy += sin(XMConvertToRadians(degrees));
+	m_dy += sin(XMConvertToRadians(degrees * m_rotationSpeed));
 
 	if (XMConvertToDegrees(m_dy) > 80.0f) m_dy = XMConvertToRadians(80.0f);
 	else if (XMConvertToDegrees(m_dy) < -80.0f) m_dy = XMConvertToRadians(-80.0f);
