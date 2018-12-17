@@ -25,7 +25,10 @@ HRESULT Input::InitInput(HINSTANCE hinstance, HWND hwnd)
 
 	//Keyboard Setup
 
-	hr = m_direct_input->CreateDevice(GUID_SysKeyboard, &m_keyboard_device, NULL);
+	hr = m_direct_input->CreateDevice(
+		GUID_SysKeyboard,
+		&m_keyboard_device,
+		NULL);
 	if (FAILED(hr)) return hr;
 
 	hr = m_keyboard_device->SetDataFormat(&c_dfDIKeyboard);
@@ -41,7 +44,10 @@ HRESULT Input::InitInput(HINSTANCE hinstance, HWND hwnd)
 
 	//Mouse Setup
 
-	hr = m_direct_input->CreateDevice(GUID_SysMouse, &m_mouse_device, NULL);
+	hr = m_direct_input->CreateDevice(
+		GUID_SysMouse,
+		&m_mouse_device,
+		NULL);
 	if (FAILED(hr)) return hr;
 
 	hr = m_mouse_device->SetDataFormat(&c_dfDIMouse);
@@ -78,7 +84,7 @@ void Input::ReadInputStates(void)
 	//Read mouse state
 	hr = m_mouse_device->GetDeviceState(
 		sizeof(m_mouse_state.rgbButtons),
-		(LPVOID)&m_mouse_state);
+		(LPVOID)&m_mouse_state.rgbButtons);
 
 	if (FAILED(hr))
 	{

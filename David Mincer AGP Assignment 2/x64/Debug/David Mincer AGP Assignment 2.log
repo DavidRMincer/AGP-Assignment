@@ -1,5 +1,1 @@
-﻿  Input.cpp
-  c:\program files (x86)\windows kits\10\include\10.0.16299.0\um\dinput.h: DIRECTINPUT_VERSION undefined. Defaulting to version 0x0800
-c:\users\dave-id\documents\github\agp-assignment\david mincer agp assignment 2\input.cpp(102): warning C4244: 'return': conversion from 'LONG' to 'float', possible loss of data
-c:\users\dave-id\documents\github\agp-assignment\david mincer agp assignment 2\input.cpp(110): warning C4244: 'return': conversion from 'LONG' to 'float', possible loss of data
-  David Mincer AGP Assignment 2.vcxproj -> C:\Users\Dave-id\Documents\GitHub\AGP-Assignment\David Mincer AGP Assignment 2\x64\Debug\David Mincer AGP Assignment 2.exe
+﻿  David Mincer AGP Assignment 2.vcxproj -> C:\Users\Dave-id\Documents\GitHub\AGP-Assignment\David Mincer AGP Assignment 2\x64\Debug\David Mincer AGP Assignment 2.exe
