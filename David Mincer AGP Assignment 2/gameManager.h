@@ -11,6 +11,9 @@
 #include "text2D.h"
 #include "Input.h"
 
+
+
+
 // Define vertex structure
 struct POS_COL_TEX_NORM_VERTEX//This will be added to and renamed in future tutorials
 {
@@ -33,31 +36,21 @@ struct CONSTANT_BUFFER0
 class gameManager
 {
 private:
-	/*D3D_DRIVER_TYPE				g_driverType = D3D_DRIVER_TYPE_NULL;
-	D3D_FEATURE_LEVEL			g_featureLevel = D3D_FEATURE_LEVEL_11_0;*/
-	HWND*						m_hWnd;
-	ID3D11Device*				m_pD3DDevice = NULL;
-	IDXGISwapChain*				m_pSwapChain = NULL;
-	ID3D11DeviceContext*		m_pImmediateContext = NULL;
-	ID3D11RenderTargetView*		m_pBackBufferRTView = NULL;
-	ID3D11DepthStencilView*		m_pZBuffer;
-
 	ID3D11Buffer*				g_pVertexBuffer;
 	ID3D11Buffer*				g_pConstantBuffer0;
 	ID3D11VertexShader*			g_pVertexShader;
 	ID3D11PixelShader*			g_pPixelShader;
 	ID3D11InputLayout*			g_pInputLayout;
-	camera*						g_pCamera;
-	Input*						g_pInput = new Input();
-	ID3D11ShaderResourceView*	g_pTexture0;
-	ID3D11SamplerState*			g_pSampler0;
-	XMVECTOR					g_directional_light_shines_from,
-								g_directional_light_colour,
-								g_ambient_light_colour;
-	Text2D*						m_UIText;
-	float						redStuff = 1.0f,
-								scaling = 1.0f,
-								degrees = 15.0f,
+
+	camera*						m_pCamera;
+	Input*						m_pInput = new Input();
+	ID3D11ShaderResourceView*	m_pTexture0;
+	ID3D11SamplerState*			m_pSampler0;
+	XMVECTOR					m_directional_light_shines_from,
+								m_directional_light_colour,
+								m_ambient_light_colour;
+	Text2D*						m_UIText = nullptr;
+	float						degrees = 15.0f,
 								cube1Z = 10.0f,
 								gravity = 0.000005f,
 								lightZ = 45.0f;
@@ -65,13 +58,16 @@ private:
 
 public:
 	gameManager();
-	gameManager(HWND& hwnd, ID3D11Device* device,
-		IDXGISwapChain* swapChain, ID3D11DeviceContext* immContext,
-		ID3D11RenderTargetView* RTView, ID3D11DepthStencilView* zBuffer);
-	HRESULT InitialiseGraphics();
-	void RenderFrame(void);
-	void UpdateLogic(void);
-	void RunGameLoop(void);
+	gameManager(HINSTANCE* hInstance, HWND* hWindow,
+		ID3D11Device* device, ID3D11DeviceContext* context);
+	HRESULT InitialiseGraphics(ID3D11Device* device, ID3D11DeviceContext* context);
+	void RenderFrame(ID3D11DeviceContext* context, ID3D11RenderTargetView* backBuffer,
+		ID3D11DepthStencilView* zBuffer, IDXGISwapChain* swapChain);
+	void UpdateLogic(HWND* hWindow);
+	void RunGameLoop(HWND* hWindow, ID3D11DeviceContext* context,
+		ID3D11RenderTargetView* backBuffer, ID3D11DepthStencilView* zBuffer,
+		IDXGISwapChain* swapChain);
+	void ShutdownD3D();
 	~gameManager();
 };
 

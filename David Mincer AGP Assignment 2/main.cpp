@@ -4,9 +4,8 @@
 //////////////////////////////////////////////////////////////////////////////////////
 //	Global Variables
 //////////////////////////////////////////////////////////////////////////////////////
-HINSTANCE	g_hInst = NULL;
-HWND		g_hWnd = NULL;
-
+HINSTANCE					g_hInst = NULL;
+HWND						g_hWnd = NULL;
 ID3D11Device*				g_pD3DDevice = NULL;
 D3D_DRIVER_TYPE				g_driverType = D3D_DRIVER_TYPE_NULL;
 D3D_FEATURE_LEVEL			g_featureLevel = D3D_FEATURE_LEVEL_11_0;
@@ -14,22 +13,11 @@ ID3D11DeviceContext*		g_pImmediateContext = NULL;
 IDXGISwapChain*				g_pSwapChain = NULL;
 ID3D11RenderTargetView*		g_pBackBufferRTView = NULL;
 ID3D11DepthStencilView*		g_pZBuffer;
-Text2D*						g_2DText;
-//ID3D11Buffer*				g_pVertexBuffer;
-//ID3D11Buffer*				g_pConstantBuffer0;
-//ID3D11VertexShader*			g_pVertexShader;
-//ID3D11PixelShader*			g_pPixelShader;
 
-gameManager*				game = new gameManager(
-								g_hWnd,
-								g_pD3DDevice,
-								g_pSwapChain,
-								g_pImmediateContext,
-								g_pBackBufferRTView,
-								g_pZBuffer);
+gameManager*				game;
 
-// Rename for each tutorial – This will appear in the title bar of the window
-char		g_TutorialName[100] = "Tutorial 01 Exercise 04\0";
+// This will appear in the title bar of the window
+const char		g_GameName[100] = "FireDodge\0";
 
 
 //////////////////////////////////////////////////////////////////////////////////////
@@ -38,7 +26,6 @@ char		g_TutorialName[100] = "Tutorial 01 Exercise 04\0";
 HRESULT InitialiseWindow(HINSTANCE hInstance, int nCmdShow);
 LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
 HRESULT InitialiseD3D();
-void ShutdownD3D();
 
 
 //////////////////////////////////////////////////////////////////////////////////////
@@ -77,7 +64,11 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	// Main message loop
 	MSG msg = { 0 };
 
-	//game->InitialiseGraphics();
+	game = new gameManager(
+		&g_hInst,
+		&g_hWnd,
+		g_pD3DDevice,
+		g_pImmediateContext);
 
 	while (msg.message != WM_QUIT)
 	{
@@ -88,11 +79,16 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		}
 		else
 		{
-			game->RunGameLoop();
+			game->RunGameLoop(
+				&g_hWnd,
+				g_pImmediateContext,
+				g_pBackBufferRTView,
+				g_pZBuffer,
+				g_pSwapChain);
 		}
 	}
 
-	ShutdownD3D();
+	game->ShutdownD3D();
 
 	return (int)msg.wParam;
 }
@@ -121,7 +117,7 @@ HRESULT InitialiseWindow(HINSTANCE hInstance, int nCmdShow)
 	g_hInst = hInstance;
 	RECT rc = { 0, 0, 640, 480 };
 	AdjustWindowRect(&rc, WS_OVERLAPPEDWINDOW, FALSE);
-	g_hWnd = CreateWindow(Name, g_TutorialName, WS_OVERLAPPEDWINDOW,
+	g_hWnd = CreateWindow(Name, g_GameName, WS_OVERLAPPEDWINDOW,
 		CW_USEDEFAULT, CW_USEDEFAULT, rc.right - rc.left,
 		rc.bottom - rc.top, NULL, NULL, hInstance, NULL);
 	if (!g_hWnd)
@@ -334,24 +330,7 @@ HRESULT InitialiseD3D()
 
 	g_pImmediateContext->RSSetViewports(1, &viewport);
 
-	g_2DText = new Text2D("assets/font1.bmp", g_pD3DDevice, g_pImmediateContext);
-
 	return S_OK;
 }
 
-//////////////////////////////////////////////////////////////////////////////////////
-// Clean up D3D objects
-//////////////////////////////////////////////////////////////////////////////////////
-void ShutdownD3D()
-{
-	if (g_pD3DDevice)			g_pD3DDevice->Release();
-	/*if (g_pConstantBuffer0)		g_pConstantBuffer0->Release();
-	if (g_pVertexBuffer)		g_pVertexBuffer->Release();
-	if (g_pVertexShader)		g_pVertexShader->Release();
-	if (g_pPixelShader)			g_pPixelShader->Release();*/
-	if (g_pBackBufferRTView)	g_pBackBufferRTView->Release();
-	if (g_pSwapChain)			g_pSwapChain->Release();
-	if (g_pImmediateContext)	g_pImmediateContext->Release();
-	if (g_pD3DDevice)			g_pD3DDevice->Release();
-}
 
