@@ -83,8 +83,8 @@ void Input::ReadInputStates(void)
 
 	//Read mouse state
 	hr = m_mouse_device->GetDeviceState(
-		sizeof(m_mouse_state.rgbButtons),
-		(LPVOID)&m_mouse_state.rgbButtons);
+		sizeof(m_mouse_state),
+		(LPVOID)&m_mouse_state);
 
 	if (FAILED(hr))
 	{
@@ -113,7 +113,7 @@ float Input::GetHorizontalMouseInput(void)
 //////////////////////////////////////////////////////////////////////////////////////
 float Input::GetVerticalMouseInput(void)
 {
-	return m_mouse_state.lY;
+	return -m_mouse_state.lY;
 }
 
 Input::~Input()

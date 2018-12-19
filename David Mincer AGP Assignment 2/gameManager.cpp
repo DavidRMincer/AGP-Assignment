@@ -176,7 +176,7 @@ HRESULT gameManager::InitialiseGraphics(ID3D11Device * device, ID3D11DeviceConte
 
 	context->IASetInputLayout(g_pInputLayout);
 
-	m_pCamera = new camera(0.0f, 0.0f, 0.0f, 0.0f, 0.002f, 1.0f, 0.010f);
+	m_pCamera = new camera(0.0f, 0.0f, 0.0f, 0.0f, 0.002f, 0.25f, 0.010f);
 
 	D3D11_SAMPLER_DESC sampler_desc;
 	ZeroMemory(&sampler_desc, sizeof(sampler_desc));
@@ -201,10 +201,6 @@ void gameManager::RenderFrame(ID3D11DeviceContext* context, ID3D11RenderTargetVi
 	XMMATRIX projection,
 		world,
 		view = m_pCamera->GetViewMatrix();
-
-	m_directional_light_shines_from = XMVectorSet(0.0f, -10.0f, 0.0f, 1.0f);
-	m_directional_light_colour = XMVectorSet(1.0f, 1.0f, 1.0f, 1.0f);
-	m_ambient_light_colour = XMVectorSet(0.2f, 0.2f, 0.2f, 1.0f);
 
 	// Clear the back buffer - choose a colour you like
 	float rgba_clear_colour[4] = { 0.0f, 0.4f, 0.0f, 1.0f };
@@ -311,8 +307,8 @@ void gameManager::RenderFrame(ID3D11DeviceContext* context, ID3D11RenderTargetVi
 void gameManager::UpdateLogic(HWND* hWindow)
 {
 	//Get Mouse Inputs
-	/*g_pCamera->Rotate(g_pInput->GetHorizontalMouseInput());
-	g_pCamera->Pitch(g_pInput->GetVerticalMouseInput());*/
+	m_pCamera->Rotate(m_pInput->GetHorizontalMouseInput());
+	m_pCamera->Pitch(m_pInput->GetVerticalMouseInput());
 
 	//Get Keyboard Inputs
 	if (m_pInput->IsKeyPressed(DIK_ESCAPE)) DestroyWindow(*hWindow);

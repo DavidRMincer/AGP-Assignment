@@ -30,10 +30,17 @@
     <ClCompile Include="gameManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="objfilemodel.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="model.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="shaders.hlsl" />
     <FxCompile Include="text2D_shaders.hlsl" />
+    <FxCompile Include="model_shaders.hlsl" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="camera.h">
@@ -46,6 +53,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="gameManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="objfilemodel.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="model.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

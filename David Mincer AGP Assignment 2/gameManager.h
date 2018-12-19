@@ -41,14 +41,14 @@ private:
 	ID3D11VertexShader*			g_pVertexShader;
 	ID3D11PixelShader*			g_pPixelShader;
 	ID3D11InputLayout*			g_pInputLayout;
+	ID3D11ShaderResourceView*	m_pTexture0;
+	ID3D11SamplerState*			m_pSampler0;
 
 	camera*						m_pCamera;
 	Input*						m_pInput = new Input();
-	ID3D11ShaderResourceView*	m_pTexture0;
-	ID3D11SamplerState*			m_pSampler0;
-	XMVECTOR					m_directional_light_shines_from,
-								m_directional_light_colour,
-								m_ambient_light_colour;
+	XMVECTOR					m_directional_light_shines_from = XMVectorSet(0.0f, -10.0f, 0.0f, 1.0f),
+								m_directional_light_colour = XMVectorSet(0.9f, 0.3f, 0.05f, 1.0f),
+								m_ambient_light_colour = XMVectorSet(0.3f, 0.3f, 0.3f, 1.0f);
 	Text2D*						m_UIText = nullptr;
 	float						degrees = 15.0f,
 								cube1Z = 10.0f,
