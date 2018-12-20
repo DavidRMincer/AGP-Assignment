@@ -1,10 +1,10 @@
+Texture2D		texture0;
+SamplerState	sampler0;
+
 cbuffer CB0
 {
 	matrix WVPMatrix;		// 64 bytes
 };	//total = 64 bytes
-
-Texture2D		texture0;
-SamplerState	sampler0;
 
 struct VOut
 {
@@ -17,10 +17,10 @@ VOut ModelVS(float4 position : POSITION, float2 texcoord : TEXCOORD, float3 norm
 {
 	VOut output;
 
-	float4 default_color	= { 1.0, 1.0, 1.0, 1.0 };
-	output.position			= mul(WVPMatrix, position);
-	output.texcoord			= texcoord;
-	output.color			= default_color;
+	float4 default_color = { 1.0, 1.0, 1.0, 1.0 };
+	output.position = mul(WVPMatrix, position);
+	output.texcoord = texcoord;
+	output.color = default_color;
 
 	return output;
 }

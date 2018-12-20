@@ -24,7 +24,7 @@ private:
 public:
 	model();
 	model(ID3D11Device* device, ID3D11DeviceContext* context);
-	HRESULT LoadObjModel(char* filename[255]);
+	HRESULT LoadObjModel(char* filename);
 	~model();
 };
 

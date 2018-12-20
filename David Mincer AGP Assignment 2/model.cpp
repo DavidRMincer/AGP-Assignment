@@ -15,6 +15,20 @@ model::model(ID3D11Device * device, ID3D11DeviceContext * context)
 	m_pImmediateContext = context;
 }
 
+//////////////////////////////////////////////////////////////////////////////////////
+//	Load object model
+//////////////////////////////////////////////////////////////////////////////////////
+HRESULT model::LoadObjModel(char * filename)
+{
+	ObjFileModel* pObject;
+
+	pObject = new ObjFileModel(filename, m_pD3DDevice, m_pImmediateContext);
+
+	if (pObject->filename == "FILE NOT LOADED") return S_FALSE;
+
+	return S_OK;
+}
+
 
 model::~model()
 {

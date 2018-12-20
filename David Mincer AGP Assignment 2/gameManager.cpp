@@ -86,7 +86,7 @@ HRESULT gameManager::InitialiseGraphics(ID3D11Device * device, ID3D11DeviceConte
 	bufferDesc.ByteWidth = sizeof(vertices);									//Set the total size of the buffer
 	bufferDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;							//Set the type of buffer to vertex buffer
 	bufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;							//Allow access by the CPU
-	hr = device->CreateBuffer(&bufferDesc, NULL, &g_pVertexBuffer);		//Create the buffer
+	hr = device->CreateBuffer(&bufferDesc, NULL, &m_pVertexBuffer);		//Create the buffer
 
 	if (FAILED(hr)) return hr; //Return an error code if failed
 
@@ -101,21 +101,21 @@ HRESULT gameManager::InitialiseGraphics(ID3D11Device * device, ID3D11DeviceConte
 	constant_buffer_desc.ByteWidth = CONSTANT_BUFFER_SIZE;	// Must be a multiple of 16
 	constant_buffer_desc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
 
-	hr = device->CreateBuffer(&constant_buffer_desc, NULL, &g_pConstantBuffer0);
+	hr = device->CreateBuffer(&constant_buffer_desc, NULL, &m_pConstantBuffer0);
 
 	if (FAILED(hr)) return hr;
 
 	//Lock the buffer to allow writing
-	context->Map(g_pVertexBuffer, NULL, D3D11_MAP_WRITE_DISCARD, NULL, &ms);
+	context->Map(m_pVertexBuffer, NULL, D3D11_MAP_WRITE_DISCARD, NULL, &ms);
 
 	//Copy the data
 	memcpy(ms.pData, vertices, sizeof(vertices));
 
 	//Unlock the buffer
-	context->Unmap(g_pVertexBuffer, NULL);
+	context->Unmap(m_pVertexBuffer, NULL);
 
 	//Load and compile the pixel and vertex shaders - use vs_5_0 to target DX11 hardware only
-	ID3DBlob *VS, *PS, *error;
+	ID3DBlob *VS, *PS, *MVS, *MPS, *error;
 	hr = D3DX11CompileFromFile("shaders.hlsl", 0, 0, "VShader", "vs_4_0", 0, 0, 0, &VS, &error, 0);
 
 	if (error != 0)//Check for shader compilation error
@@ -140,22 +140,46 @@ HRESULT gameManager::InitialiseGraphics(ID3D11Device * device, ID3D11DeviceConte
 		}
 	}
 
+	hr = D3DX11CompileFromFile("model_shaders.hlsl", 0, 0, "ModelVS", "vs_4_0", 0, 0, 0, &MVS, &error, 0);
+
+	if (error != 0)//Check for shader compilation error
+	{
+		OutputDebugStringA((char*)error->GetBufferPointer());
+		error->Release();
+		if (FAILED(hr))//Don't fail if error is just a warning
+		{
+			return hr;
+		}
+	}
+
+	hr = D3DX11CompileFromFile("model_shaders.hlsl", 0, 0, "ModelPS", "vs_4_0", 0, 0, 0, &MPS, &error, 0);
+
+	if (error != 0)//Check for shader compilation error
+	{
+		OutputDebugStringA((char*)error->GetBufferPointer());
+		error->Release();
+		if (FAILED(hr))//Don't fail if error is just a warning
+		{
+			return hr;
+		}
+	}
+
 	//Create shader objects
-	hr = device->CreateVertexShader(VS->GetBufferPointer(), VS->GetBufferSize(), NULL, &g_pVertexShader);
+	hr = device->CreateVertexShader(VS->GetBufferPointer(), VS->GetBufferSize(), NULL, &m_pVertexShader);
 	if (FAILED(hr))
 	{
 		return hr;
 	}
 
-	hr = device->CreatePixelShader(PS->GetBufferPointer(), PS->GetBufferSize(), NULL, &g_pPixelShader);
+	hr = device->CreatePixelShader(PS->GetBufferPointer(), PS->GetBufferSize(), NULL, &m_pPixelShader);
 	if (FAILED(hr))
 	{
 		return hr;
 	}
 
 	//Set the shader objects as active
-	context->VSSetShader(g_pVertexShader, 0, 0);
-	context->PSSetShader(g_pPixelShader, 0, 0);
+	context->VSSetShader(m_pVertexShader, 0, 0);
+	context->PSSetShader(m_pPixelShader, 0, 0);
 
 	//Create and set the input layout object
 	D3D11_INPUT_ELEMENT_DESC iedesc[] =
@@ -168,13 +192,13 @@ HRESULT gameManager::InitialiseGraphics(ID3D11Device * device, ID3D11DeviceConte
 		{ "NORMAL", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 }
 	};
 
-	hr = device->CreateInputLayout(iedesc, ARRAYSIZE(iedesc), VS->GetBufferPointer(), VS->GetBufferSize(), &g_pInputLayout);
+	hr = device->CreateInputLayout(iedesc, ARRAYSIZE(iedesc), VS->GetBufferPointer(), VS->GetBufferSize(), &m_pInputLayout);
 	if (FAILED(hr))
 	{
 		return hr;
 	}
 
-	context->IASetInputLayout(g_pInputLayout);
+	context->IASetInputLayout(m_pInputLayout);
 
 	m_pCamera = new camera(0.0f, 0.0f, 0.0f, 0.0f, 0.002f, 0.25f, 0.010f);
 
@@ -211,7 +235,7 @@ void gameManager::RenderFrame(ID3D11DeviceContext* context, ID3D11RenderTargetVi
 	//Set vertex buffer
 	UINT stride = sizeof(POS_COL_TEX_NORM_VERTEX);
 	UINT offset = 0;
-	context->IASetVertexBuffers(0, 1, &g_pVertexBuffer, &stride, &offset);
+	context->IASetVertexBuffers(0, 1, &m_pVertexBuffer, &stride, &offset);
 
 	XMMATRIX transpose;
 	CONSTANT_BUFFER0 cb0_values;
@@ -230,8 +254,8 @@ void gameManager::RenderFrame(ID3D11DeviceContext* context, ID3D11RenderTargetVi
 	cb0_values.directional_light_vector = XMVector3Normalize(cb0_values.directional_light_vector);
 
 	// upload new values for constant buffer
-	context->UpdateSubresource(g_pConstantBuffer0, 0, 0, &cb0_values, 0, 0);
-	context->VSSetConstantBuffers(0, 1, &g_pConstantBuffer0);
+	context->UpdateSubresource(m_pConstantBuffer0, 0, 0, &cb0_values, 0, 0);
+	context->VSSetConstantBuffers(0, 1, &m_pConstantBuffer0);
 
 	//Select which primitive type to use
 	context->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
@@ -239,9 +263,9 @@ void gameManager::RenderFrame(ID3D11DeviceContext* context, ID3D11RenderTargetVi
 	context->PSSetSamplers(0, 1, &m_pSampler0);
 	context->PSSetShaderResources(0, 1, &m_pTexture0);
 
-	context->VSSetShader(g_pVertexShader, 0, 0);
-	context->PSSetShader(g_pPixelShader, 0, 0);
-	context->IASetInputLayout(g_pInputLayout);
+	context->VSSetShader(m_pVertexShader, 0, 0);
+	context->PSSetShader(m_pPixelShader, 0, 0);
+	context->IASetInputLayout(m_pInputLayout);
 
 	//Draw vertex buffer to back buffer
 	context->Draw(36, 0);
@@ -258,8 +282,8 @@ void gameManager::RenderFrame(ID3D11DeviceContext* context, ID3D11RenderTargetVi
 	cb0_values.directional_light_vector = XMVector3Normalize(cb0_values.directional_light_vector);
 
 	// upload new values for constant buffer
-	context->UpdateSubresource(g_pConstantBuffer0, 0, 0, &cb0_values, 0, 0);
-	context->VSSetConstantBuffers(0, 1, &g_pConstantBuffer0);
+	context->UpdateSubresource(m_pConstantBuffer0, 0, 0, &cb0_values, 0, 0);
+	context->VSSetConstantBuffers(0, 1, &m_pConstantBuffer0);
 
 	//Select which primitive type to use
 	context->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
@@ -281,8 +305,8 @@ void gameManager::RenderFrame(ID3D11DeviceContext* context, ID3D11RenderTargetVi
 			cb0_values.directional_light_vector = XMVector3Transform(m_directional_light_shines_from, transpose);
 			cb0_values.directional_light_vector = XMVector3Normalize(cb0_values.directional_light_vector);
 
-			context->UpdateSubresource(g_pConstantBuffer0, 0, 0, &cb0_values, 0, 0);
-			context->VSSetConstantBuffers(0, 1, &g_pConstantBuffer0);
+			context->UpdateSubresource(m_pConstantBuffer0, 0, 0, &cb0_values, 0, 0);
+			context->VSSetConstantBuffers(0, 1, &m_pConstantBuffer0);
 
 			context->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
@@ -336,11 +360,11 @@ void gameManager::RunGameLoop(HWND* hWindow, ID3D11DeviceContext* context, ID3D1
 //////////////////////////////////////////////////////////////////////////////////////
 void gameManager::ShutdownD3D()
 {
-	if (g_pInputLayout)			g_pInputLayout->Release();
-	if (g_pConstantBuffer0)		g_pConstantBuffer0->Release();
-	if (g_pVertexBuffer)		g_pVertexBuffer->Release();
-	if (g_pVertexShader)		g_pVertexShader->Release();
-	if (g_pPixelShader)			g_pPixelShader->Release();
+	if (m_pInputLayout)			m_pInputLayout->Release();
+	if (m_pConstantBuffer0)		m_pConstantBuffer0->Release();
+	if (m_pVertexBuffer)		m_pVertexBuffer->Release();
+	if (m_pVertexShader)		m_pVertexShader->Release();
+	if (m_pPixelShader)			m_pPixelShader->Release();
 }
 
 
