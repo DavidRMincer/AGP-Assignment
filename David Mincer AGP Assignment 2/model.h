@@ -1,6 +1,11 @@
 #pragma once
 #include "objfilemodel.h"
 
+struct MODEL_CONSTANT_BUFFER
+{
+	XMMATRIX WorldViewProjection;	//64 bytes
+};	//TOTAL SIZE = 64 bytes
+
 class model
 {
 private:
@@ -20,11 +25,46 @@ private:
 							m_yAngle = 0.0f,
 							m_zAngle = 0.0f,
 							m_scale = 1.0f;
+	int						m_constantBufferSize = 64;
 
 public:
 	model();
 	model(ID3D11Device* device, ID3D11DeviceContext* context);
 	HRESULT LoadObjModel(char* filename);
+	void Draw(XMMATRIX* view, XMMATRIX* projection);
+
+	//////////////////////////////////////////////////////////////////////////////////////
+	//	Sets values
+	//////////////////////////////////////////////////////////////////////////////////////
+	void SetXPos(float x);
+	void SetYPos(float y);
+	void SetZPos(float z);
+	void SetXAngle(float x);
+	void SetYAngle(float y);
+	void SetZAngle(float z);
+	void SetScale(float s);
+
+	//////////////////////////////////////////////////////////////////////////////////////
+	//	Gets values
+	//////////////////////////////////////////////////////////////////////////////////////
+	float GetXPos(void);
+	float GetYPos(void);
+	float GetZPos(void);
+	float GetXAngle(void);
+	float GetYAngle(void);
+	float GetZAngle(void);
+	float GetScale(void);
+
+	//////////////////////////////////////////////////////////////////////////////////////
+	// Increments values
+	//////////////////////////////////////////////////////////////////////////////////////
+	void AddXPos(float x);
+	void AddYPos(float y);
+	void AddZPos(float z);
+	void AddXAngle(float x);
+	void AddYAngle(float y);
+	void AddZAngle(float z);
+	void AddScale(float s);
 	~model();
 };
 

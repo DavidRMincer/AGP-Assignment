@@ -1,10 +1,10 @@
-Texture2D		texture0;
-SamplerState	sampler0;
-
 cbuffer CB0
 {
 	matrix WVPMatrix;		// 64 bytes
 };	//total = 64 bytes
+
+Texture2D		texture0;
+SamplerState	sampler0;
 
 struct VOut
 {

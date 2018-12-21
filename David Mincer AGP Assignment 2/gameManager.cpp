@@ -28,6 +28,9 @@ HRESULT gameManager::InitialiseGraphics(ID3D11Device * device, ID3D11DeviceConte
 		&m_pTexture0,
 		NULL);
 
+	m_pModel = new model(device, context);
+	m_pModel->LoadObjModel((char*)"Assets/Sphere.obj");
+
 	//Define vertices of a triangle - screen coordinates -1.0 to +1.0
 	POS_COL_TEX_NORM_VERTEX vertices[] =
 	{
@@ -115,7 +118,7 @@ HRESULT gameManager::InitialiseGraphics(ID3D11Device * device, ID3D11DeviceConte
 	context->Unmap(m_pVertexBuffer, NULL);
 
 	//Load and compile the pixel and vertex shaders - use vs_5_0 to target DX11 hardware only
-	ID3DBlob *VS, *PS, *MVS, *MPS, *error;
+	ID3DBlob *VS, *PS, *error;
 	hr = D3DX11CompileFromFile("shaders.hlsl", 0, 0, "VShader", "vs_4_0", 0, 0, 0, &VS, &error, 0);
 
 	if (error != 0)//Check for shader compilation error
@@ -129,30 +132,6 @@ HRESULT gameManager::InitialiseGraphics(ID3D11Device * device, ID3D11DeviceConte
 	}
 
 	hr = D3DX11CompileFromFile("shaders.hlsl", 0, 0, "PShader", "ps_4_0", 0, 0, 0, &PS, &error, 0);
-
-	if (error != 0)//Check for shader compilation error
-	{
-		OutputDebugStringA((char*)error->GetBufferPointer());
-		error->Release();
-		if (FAILED(hr))//Don't fail if error is just a warning
-		{
-			return hr;
-		}
-	}
-
-	hr = D3DX11CompileFromFile("model_shaders.hlsl", 0, 0, "ModelVS", "vs_4_0", 0, 0, 0, &MVS, &error, 0);
-
-	if (error != 0)//Check for shader compilation error
-	{
-		OutputDebugStringA((char*)error->GetBufferPointer());
-		error->Release();
-		if (FAILED(hr))//Don't fail if error is just a warning
-		{
-			return hr;
-		}
-	}
-
-	hr = D3DX11CompileFromFile("model_shaders.hlsl", 0, 0, "ModelPS", "vs_4_0", 0, 0, 0, &MPS, &error, 0);
 
 	if (error != 0)//Check for shader compilation error
 	{
@@ -220,14 +199,11 @@ HRESULT gameManager::InitialiseGraphics(ID3D11Device * device, ID3D11DeviceConte
 //////////////////////////////////////////////////////////////////////////////////////
 void gameManager::RenderFrame(ID3D11DeviceContext* context, ID3D11RenderTargetView* backBuffer, ID3D11DepthStencilView* zBuffer, IDXGISwapChain* swapChain)
 {
-	m_pInput->ReadInputStates();
-
 	XMMATRIX projection,
 		world,
 		view = m_pCamera->GetViewMatrix();
 
-	// Clear the back buffer - choose a colour you like
-	float rgba_clear_colour[4] = { 0.0f, 0.4f, 0.0f, 1.0f };
+	// Clear the back buffer
 	context->ClearRenderTargetView(backBuffer, rgba_clear_colour);
 
 	context->ClearDepthStencilView(zBuffer, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
@@ -314,6 +290,12 @@ void gameManager::RenderFrame(ID3D11DeviceContext* context, ID3D11RenderTargetVi
 		}
 	}
 
+	//Render sphere
+	m_pModel->SetZPos(3);
+	m_pModel->SetYPos(2);
+
+	m_pModel->Draw(&view, &projection);
+
 	// RENDER TEXT HERE
 
 	m_UIText->AddText("SWEET DREAMS", -1.0f, +1.0f, 0.1f);
@@ -330,11 +312,14 @@ void gameManager::RenderFrame(ID3D11DeviceContext* context, ID3D11RenderTargetVi
 //////////////////////////////////////////////////////////////////////////////////////
 void gameManager::UpdateLogic(HWND* hWindow)
 {
-	//Get Mouse Inputs
+	//Read input states
+	m_pInput->ReadInputStates();
+
+	//Get mouse inputs
 	m_pCamera->Rotate(m_pInput->GetHorizontalMouseInput());
 	m_pCamera->Pitch(m_pInput->GetVerticalMouseInput());
 
-	//Get Keyboard Inputs
+	//Get keyboard inputs
 	if (m_pInput->IsKeyPressed(DIK_ESCAPE)) DestroyWindow(*hWindow);
 	if (m_pInput->IsKeyPressed(DIK_W)) m_pCamera->Forward();
 	if (m_pInput->IsKeyPressed(DIK_S)) m_pCamera->Backward();
@@ -360,6 +345,12 @@ void gameManager::RunGameLoop(HWND* hWindow, ID3D11DeviceContext* context, ID3D1
 //////////////////////////////////////////////////////////////////////////////////////
 void gameManager::ShutdownD3D()
 {
+	if (m_pModel)
+	{
+		delete m_pModel;
+		m_pModel = NULL;
+	}
+
 	if (m_pInputLayout)			m_pInputLayout->Release();
 	if (m_pConstantBuffer0)		m_pConstantBuffer0->Release();
 	if (m_pVertexBuffer)		m_pVertexBuffer->Release();
