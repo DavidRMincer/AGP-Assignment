@@ -21,11 +21,10 @@ model::model(ID3D11Device * device, ID3D11DeviceContext * context)
 HRESULT model::LoadObjModel(char * filename)
 {
 	HRESULT hr;
-	ObjFileModel* pObject;
 
-	pObject = new ObjFileModel(filename, m_pD3DDevice, m_pImmediateContext);
+	m_pObject = new ObjFileModel(filename, m_pD3DDevice, m_pImmediateContext);
 
-	if (pObject->filename == "FILE NOT LOADED") return S_FALSE;
+	if (m_pObject->filename == "FILE NOT LOADED") return S_FALSE;
 
 	//Load and compile the pixel and vertex shaders
 	ID3DBlob *MVS, *MPS, *error;
