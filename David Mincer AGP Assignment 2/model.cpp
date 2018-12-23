@@ -103,7 +103,8 @@ HRESULT model::LoadObjModel(char * filename)
 //////////////////////////////////////////////////////////////////////////////////////
 void model::Draw(XMMATRIX * view, XMMATRIX * projection)
 {
-	XMMATRIX world;
+	XMMATRIX world,
+		model_transpose;
 
 	//Scale
 	world = XMMatrixScaling(
@@ -124,7 +125,13 @@ void model::Draw(XMMATRIX * view, XMMATRIX * projection)
 	//Create model constant buffer
 	MODEL_CONSTANT_BUFFER model_cb_values;
 	model_cb_values.WorldViewProjection = world * (*view) * (*projection);
+	model_transpose = XMMatrixTranspose(world);
 
+	model_cb_values.directional_light_colour = m_directional_light_colour;
+	model_cb_values.ambient_light_colour = m_ambient_light_colour;
+	model_cb_values.directional_light_vector = XMVector3Transform(m_directional_light_shines_from, model_transpose);
+	model_cb_values.directional_light_vector = XMVector3Normalize(model_cb_values.directional_light_vector);
+	
 	// upload new values for constant buffer
 	m_pImmediateContext->UpdateSubresource(
 		m_pConstantBuffer,
@@ -141,6 +148,19 @@ void model::Draw(XMMATRIX * view, XMMATRIX * projection)
 
 	//Draw object
 	m_pObject->Draw();
+}
+
+//////////////////////////////////////////////////////////////////////////////////////
+//	Set model texture
+//////////////////////////////////////////////////////////////////////////////////////
+void model::AddTexture(char * filename)
+{
+	D3DX11CreateShaderResourceViewFromFile(m_pD3DDevice,
+		filename,
+		NULL,
+		NULL,
+		&m_pTexture,
+		NULL);
 }
 
 //////////////////////////////////////////////////////////////////////////////////////
@@ -164,7 +184,7 @@ void model::SetYPos(float y)
 //////////////////////////////////////////////////////////////////////////////////////
 void model::SetZPos(float z)
 {
-	m_y = z;
+	m_z = z;
 }
 
 //////////////////////////////////////////////////////////////////////////////////////
@@ -197,6 +217,16 @@ void model::SetZAngle(float z)
 void model::SetScale(float s)
 {
 	m_scale = s;
+}
+
+//////////////////////////////////////////////////////////////////////////////////////
+//	Set directional light values
+//////////////////////////////////////////////////////////////////////////////////////
+void model::SetDirectionalLight(XMVECTOR origin, XMVECTOR colour, XMVECTOR ambient)
+{
+	m_directional_light_shines_from = origin;
+	m_directional_light_colour = colour;
+	m_ambient_light_colour = ambient;
 }
 
 //////////////////////////////////////////////////////////////////////////////////////

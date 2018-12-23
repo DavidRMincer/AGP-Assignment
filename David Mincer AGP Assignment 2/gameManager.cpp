@@ -291,8 +291,14 @@ void gameManager::RenderFrame(ID3D11DeviceContext* context, ID3D11RenderTargetVi
 	}
 
 	//Render sphere
-	m_pModel->SetZPos(3);
+	m_pModel->SetXPos(5);
+	m_pModel->SetZPos(7);
 	m_pModel->SetYPos(2);
+
+	m_pModel->SetDirectionalLight(
+		m_directional_light_shines_from,
+		m_directional_light_colour,
+		m_ambient_light_colour);
 
 	m_pModel->Draw(&view, &projection);
 
