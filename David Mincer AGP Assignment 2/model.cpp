@@ -29,7 +29,18 @@ HRESULT model::LoadObjModel(char * filename)
 	//Load and compile the pixel and vertex shaders
 	ID3DBlob *MVS, *MPS, *error;
 
-	hr = D3DX11CompileFromFile("model_shaders.hlsl", 0, 0, "ModelVS", "vs_4_0", 0, 0, 0, &MVS, &error, 0);
+	hr = D3DX11CompileFromFile(
+		"model_shaders.hlsl",
+		0,
+		0,
+		"ModelVS",
+		"vs_4_0",
+		0,
+		0,
+		0,
+		&MVS,
+		&error,
+		0);
 
 	if (error != 0)//Check for shader compilation error
 	{
@@ -41,7 +52,18 @@ HRESULT model::LoadObjModel(char * filename)
 		}
 	}
 
-	hr = D3DX11CompileFromFile("model_shaders.hlsl", 0, 0, "ModelPS", "ps_4_0", 0, 0, 0, &MPS, &error, 0);
+	hr = D3DX11CompileFromFile(
+		"model_shaders.hlsl",
+		0,
+		0,
+		"ModelPS",
+		"ps_4_0",
+		0,
+		0,
+		0,
+		&MPS,
+		&error,
+		0);
 
 	if (error != 0)//Check for shader compilation error
 	{

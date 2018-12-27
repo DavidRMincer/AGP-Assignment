@@ -24,7 +24,6 @@ HRESULT Input::InitInput(HINSTANCE hinstance, HWND hwnd)
 	if (FAILED(hr)) return hr;
 
 	//Keyboard Setup
-
 	hr = m_direct_input->CreateDevice(
 		GUID_SysKeyboard,
 		&m_keyboard_device,
@@ -43,7 +42,6 @@ HRESULT Input::InitInput(HINSTANCE hinstance, HWND hwnd)
 	if (FAILED(hr)) return hr;
 
 	//Mouse Setup
-
 	hr = m_direct_input->CreateDevice(
 		GUID_SysMouse,
 		&m_mouse_device,
