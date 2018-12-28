@@ -3,7 +3,7 @@
 
 struct MODEL_CONSTANT_BUFFER
 {
-	XMMATRIX WorldViewProjection;		// 64 bytes
+	XMMATRIX WorldViewProjection;		//64 bytes
 	XMVECTOR directional_light_vector;	// 16 bytes
 	XMVECTOR directional_light_colour;	// 16 bytes
 	XMVECTOR ambient_light_colour;		// 16 bytes
