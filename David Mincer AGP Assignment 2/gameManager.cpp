@@ -203,10 +203,10 @@ void gameManager::RenderFrame(ID3D11DeviceContext* context, ID3D11RenderTargetVi
 		world,
 		view = m_pCamera->GetViewMatrix();
 
-	//// Clear the back buffer
-	//context->ClearRenderTargetView(backBuffer, rgba_clear_colour);
+	// Clear the back buffer
+	context->ClearRenderTargetView(backBuffer, rgba_clear_colour);
 
-	//context->ClearDepthStencilView(zBuffer, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
+	context->ClearDepthStencilView(zBuffer, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
 
 	////Set vertex buffer
 	//UINT stride = sizeof(POS_COL_TEX_NORM_VERTEX);
@@ -309,7 +309,7 @@ void gameManager::RenderFrame(ID3D11DeviceContext* context, ID3D11RenderTargetVi
 
 	// RENDER TEXT HERE
 
-	m_UIText->AddText("SWEET DREAMS", -1.0f, +1.0f, 0.1f);
+	m_UIText->AddText("Health: here", -1.0f, +1.0f, 0.1f);
 	m_UIText->RenderText();
 
 	// Display what has just been rendered
