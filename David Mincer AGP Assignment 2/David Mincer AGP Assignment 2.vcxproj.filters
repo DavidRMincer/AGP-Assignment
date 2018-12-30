@@ -38,8 +38,8 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="shaders.hlsl" />
     <FxCompile Include="text2D_shaders.hlsl" />
+    <FxCompile Include="shaders.hlsl" />
     <FxCompile Include="model_shaders.hlsl" />
   </ItemGroup>
   <ItemGroup>

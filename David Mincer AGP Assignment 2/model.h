@@ -3,11 +3,11 @@
 
 struct MODEL_CONSTANT_BUFFER
 {
-	XMMATRIX WorldViewProjection;		//64 bytes
+	XMMATRIX WorldViewProjection;		// 64 bytes
 	XMVECTOR directional_light_vector;	// 16 bytes
 	XMVECTOR directional_light_colour;	// 16 bytes
 	XMVECTOR ambient_light_colour;		// 16 bytes
-};	//TOTAL SIZE = 112 bytes
+};	//TOTAL SIZE = 64 bytes
 
 class model
 {
@@ -32,7 +32,7 @@ private:
 								m_yAngle = 0.0f,
 								m_zAngle = 0.0f,
 								m_scale = 1.0f;
-	int							m_constantBufferSize = 64;
+	int							m_constantBufferSize = 112;
 
 public:
 	model();
@@ -66,6 +66,9 @@ public:
 	float GetYAngle(void);
 	float GetZAngle(void);
 	float GetScale(void);
+	XMVECTOR GetDLightOrigin(void);
+	XMVECTOR GetDLightColour(void);
+	XMVECTOR GetAmbientLight(void);
 
 	//////////////////////////////////////////////////////////////////////////////////////
 	// Increments values

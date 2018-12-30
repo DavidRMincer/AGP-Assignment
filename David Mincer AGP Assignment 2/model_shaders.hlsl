@@ -4,7 +4,7 @@ cbuffer CB0
 	float4 directional_light_vector;	// 16 bytes
 	float4 directional_light_colour;	// 16 bytes
 	float4 ambient_light_colour;		// 16 bytes
-										//TOTAL SIZE = 112 bytes
+										//TOTAL SIZE = 64 bytes
 };
 
 Texture2D		texture0;
@@ -17,7 +17,7 @@ struct VOut
 	float2 texcoord	: TEXCOORD;
 };
 
-VOut ModelVS(float4 position : POSITION, float2 texcoord : TEXCOORD, float3 normal : NORMAL)
+VOut ModelVS(float4 position : POSITION, float4 color : COLOR, float2 texcoord : TEXCOORD, float3 normal : NORMAL)
 {
 	VOut output;
 

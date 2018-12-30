@@ -29,7 +29,18 @@ HRESULT model::LoadObjModel(char * filename)
 	//Load and compile the pixel and vertex shaders
 	ID3DBlob *MVS, *MPS, *error;
 
-	hr = D3DX11CompileFromFile("model_shaders.hlsl", 0, 0, "ModelVS", "vs_4_0", 0, 0, 0, &MVS, &error, 0);
+	hr = D3DX11CompileFromFile(
+		"model_shaders.hlsl",
+		0,
+		0,
+		"ModelVS",
+		"vs_4_0",
+		0,
+		0,
+		0,
+		&MVS,
+		&error,
+		0);
 
 	if (error != 0)//Check for shader compilation error
 	{
@@ -41,7 +52,18 @@ HRESULT model::LoadObjModel(char * filename)
 		}
 	}
 
-	hr = D3DX11CompileFromFile("model_shaders.hlsl", 0, 0, "ModelPS", "ps_4_0", 0, 0, 0, &MPS, &error, 0);
+	hr = D3DX11CompileFromFile(
+		"model_shaders.hlsl",
+		0,
+		0,
+		"ModelPS",
+		"ps_4_0",
+		0,
+		0,
+		0,
+		&MPS,
+		&error,
+		0);
 
 	if (error != 0)//Check for shader compilation error
 	{
@@ -286,6 +308,30 @@ float model::GetScale(void)
 }
 
 //////////////////////////////////////////////////////////////////////////////////////
+//	Returns ambient light origin
+//////////////////////////////////////////////////////////////////////////////////////
+XMVECTOR model::GetDLightOrigin(void)
+{
+	return m_directional_light_shines_from;
+}
+
+//////////////////////////////////////////////////////////////////////////////////////
+//	Returns directional light colour
+//////////////////////////////////////////////////////////////////////////////////////
+XMVECTOR model::GetDLightColour(void)
+{
+	return m_directional_light_colour;
+}
+
+//////////////////////////////////////////////////////////////////////////////////////
+//	Returns ambient light colour
+//////////////////////////////////////////////////////////////////////////////////////
+XMVECTOR model::GetAmbientLight(void)
+{
+	return m_ambient_light_colour;
+}
+
+//////////////////////////////////////////////////////////////////////////////////////
 //	Adds x to x position
 //////////////////////////////////////////////////////////////////////////////////////
 void model::AddXPos(float x)
@@ -344,6 +390,11 @@ void model::AddScale(float s)
 
 model::~model()
 {
+	if (m_pTexture)
+	{
+		delete m_pTexture;
+		m_pTexture = NULL;
+	}
 	if (m_pObject)
 	{
 		delete m_pObject;

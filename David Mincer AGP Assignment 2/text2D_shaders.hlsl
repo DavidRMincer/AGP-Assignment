@@ -4,7 +4,7 @@ SamplerState sampler0;
 struct VOut
 {
 	float4 position : SV_POSITION;
-	float2 texcoord :TEXCOORD;
+	float2 texcoord : TEXCOORD;
 };
 
 VOut TextVS(float4 position : POSITION,  float2 texcoord : TEXCOORD)
