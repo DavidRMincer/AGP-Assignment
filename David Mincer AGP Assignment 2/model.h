@@ -7,7 +7,7 @@ struct MODEL_CONSTANT_BUFFER
 	XMVECTOR directional_light_vector;	// 16 bytes
 	XMVECTOR directional_light_colour;	// 16 bytes
 	XMVECTOR ambient_light_colour;		// 16 bytes
-};	//TOTAL SIZE = 64 bytes
+};	//TOTAL SIZE = 112 bytes
 
 class model
 {
@@ -32,7 +32,7 @@ private:
 								m_yAngle = 0.0f,
 								m_zAngle = 0.0f,
 								m_scale = 1.0f;
-	int							m_constantBufferSize = 112;
+	const int					m_constantBufferSize = 112;
 
 public:
 	model();

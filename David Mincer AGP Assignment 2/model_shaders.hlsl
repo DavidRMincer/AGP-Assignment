@@ -4,7 +4,7 @@ cbuffer CB0
 	float4 directional_light_vector;	// 16 bytes
 	float4 directional_light_colour;	// 16 bytes
 	float4 ambient_light_colour;		// 16 bytes
-										//TOTAL SIZE = 64 bytes
+										//TOTAL SIZE = 112 bytes
 };
 
 Texture2D		texture0;
@@ -22,7 +22,7 @@ VOut ModelVS(float4 position : POSITION, float4 color : COLOR,
 {
 	VOut output;
 
-	output.position = mul(WorldViewProjection, position);
+	output.position = mul(WVPMatrix, position);
 
 	float diffuse_amount = dot(directional_light_vector, normal);
 	diffuse_amount = saturate(diffuse_amount);
