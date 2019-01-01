@@ -24,7 +24,8 @@ HRESULT model::LoadObjModel(char * filename)
 
 	m_pObject = new ObjFileModel(filename, m_pD3DDevice, m_pImmediateContext);
 
-	if (m_pObject->filename == "FILE NOT LOADED") return S_FALSE;
+	if (m_pObject->filename == "FILE NOT LOADED")
+		return S_FALSE;
 
 	//Load and compile the pixel and vertex shaders
 	ID3DBlob *MVS, *MPS, *error;
@@ -155,6 +156,7 @@ void model::Draw(XMMATRIX * view, XMMATRIX * projection)
 	model_cb_values.directional_light_vector = XMVector3Normalize(model_cb_values.directional_light_vector);
 	
 	// upload new values for constant buffer
+	m_pImmediateContext->VSSetConstantBuffers(0, 1, &m_pConstantBuffer);
 	m_pImmediateContext->UpdateSubresource(
 		m_pConstantBuffer,
 		0,
@@ -162,11 +164,12 @@ void model::Draw(XMMATRIX * view, XMMATRIX * projection)
 		&model_cb_values,
 		0,
 		0);
-	m_pImmediateContext->VSSetConstantBuffers(0, 1, &m_pConstantBuffer);
 
 	//Set the shader objects as active
 	m_pImmediateContext->VSSetShader(m_pVShader, 0, 0);
 	m_pImmediateContext->PSSetShader(m_pPShader, 0, 0);
+	//Set the input layout as active
+	m_pImmediateContext->IASetInputLayout(m_pInputLayout);
 
 	//Draw object
 	m_pObject->Draw();
@@ -249,6 +252,16 @@ void model::SetDirectionalLight(XMVECTOR origin, XMVECTOR colour, XMVECTOR ambie
 	m_directional_light_shines_from = origin;
 	m_directional_light_colour = colour;
 	m_ambient_light_colour = ambient;
+}
+
+//////////////////////////////////////////////////////////////////////////////////////
+//	Set ambient and directional light to same colour
+//////////////////////////////////////////////////////////////////////////////////////
+void model::IgnoreDirectionalLight(void)
+{
+	m_directional_light_shines_from = XMVectorSet(0.0f, 0.0f, 0.0f, 1.0f),
+	m_directional_light_colour = XMVectorSet(1.0f, 1.0f, 1.0f, 1.0f),
+	m_ambient_light_colour = XMVectorSet(1.0f, 1.0f, 1.0f, 1.0f);
 }
 
 //////////////////////////////////////////////////////////////////////////////////////

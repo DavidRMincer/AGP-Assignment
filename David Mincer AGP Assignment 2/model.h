@@ -55,6 +55,7 @@ public:
 		XMVECTOR origin,
 		XMVECTOR colour,
 		XMVECTOR ambient);
+	void IgnoreDirectionalLight(void);
 
 	//////////////////////////////////////////////////////////////////////////////////////
 	//	Gets values
