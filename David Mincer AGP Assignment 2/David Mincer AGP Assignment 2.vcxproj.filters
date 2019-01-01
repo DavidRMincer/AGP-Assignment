@@ -36,10 +36,16 @@
     <ClCompile Include="model.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Entity.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Moving_Entity.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="shaders.hlsl" />
     <FxCompile Include="text2D_shaders.hlsl" />
+    <FxCompile Include="shaders.hlsl" />
     <FxCompile Include="model_shaders.hlsl" />
   </ItemGroup>
   <ItemGroup>
@@ -59,6 +65,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="model.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Entity.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Moving_Entity.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

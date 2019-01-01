@@ -7,7 +7,7 @@ struct MODEL_CONSTANT_BUFFER
 	XMVECTOR directional_light_vector;	// 16 bytes
 	XMVECTOR directional_light_colour;	// 16 bytes
 	XMVECTOR ambient_light_colour;		// 16 bytes
-};	//TOTAL SIZE = 112 bytes
+};	//TOTAL SIZE = 64 bytes
 
 class model
 {
@@ -66,6 +66,9 @@ public:
 	float GetYAngle(void);
 	float GetZAngle(void);
 	float GetScale(void);
+	XMVECTOR GetDLightOrigin(void);
+	XMVECTOR GetDLightColour(void);
+	XMVECTOR GetAmbientLight(void);
 
 	//////////////////////////////////////////////////////////////////////////////////////
 	// Increments values

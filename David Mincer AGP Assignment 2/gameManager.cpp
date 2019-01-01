@@ -1,4 +1,3 @@
-
 #include "gameManager.h"
 
 
@@ -21,12 +20,14 @@ HRESULT gameManager::InitialiseGraphics(ID3D11Device * device, ID3D11DeviceConte
 {
 	HRESULT hr = S_OK;
 
-	//Load Cube
-	m_pCube = new model(device, context);
-	m_pCube->LoadObjModel((char*)"Assets/cube.obj");
-	m_pCube->AddTexture((char*)"Assets/Lava_Tex.jpg");
-	
-	//Load sphere
+	//Create texture
+	/*D3DX11CreateShaderResourceViewFromFile(device,
+		"assets/Rock_Tex.jpg",
+		NULL,
+		NULL,
+		&m_pTexture0,
+		NULL);*/
+
 	m_pModel = new model(device, context);
 	m_pModel->LoadObjModel((char*)"Assets/Sphere.obj");
 	m_pModel->AddTexture((char*)"Assets/Rock_Tex.jpg");
@@ -93,7 +94,7 @@ HRESULT gameManager::InitialiseGraphics(ID3D11Device * device, ID3D11DeviceConte
 
 	//if (FAILED(hr)) return hr; //Return an error code if failed
 
-							   //Copy the vertices into the buffer
+	//						   //Copy the vertices into the buffer
 	//D3D11_MAPPED_SUBRESOURCE ms;
 
 	//// Create constant buffer
@@ -119,7 +120,18 @@ HRESULT gameManager::InitialiseGraphics(ID3D11Device * device, ID3D11DeviceConte
 
 	//Load and compile the pixel and vertex shaders - use vs_5_0 to target DX11 hardware only
 	ID3DBlob *VS, *PS, *error;
-	hr = D3DX11CompileFromFile("shaders.hlsl", 0, 0, "VShader", "vs_4_0", 0, 0, 0, &VS, &error, 0);
+	hr = D3DX11CompileFromFile(
+		"shaders.hlsl",
+		0,
+		0,
+		"VShader",
+		"vs_4_0",
+		0,
+		0,
+		0,
+		&VS,
+		&error,
+		0);
 
 	if (error != 0)//Check for shader compilation error
 	{
@@ -131,7 +143,18 @@ HRESULT gameManager::InitialiseGraphics(ID3D11Device * device, ID3D11DeviceConte
 		}
 	}
 
-	hr = D3DX11CompileFromFile("shaders.hlsl", 0, 0, "PShader", "ps_4_0", 0, 0, 0, &PS, &error, 0);
+	hr = D3DX11CompileFromFile(
+		"shaders.hlsl",
+		0,
+		0,
+		"PShader",
+		"ps_4_0",
+		0,
+		0,
+		0,
+		&PS,
+		&error,
+		0);
 
 	if (error != 0)//Check for shader compilation error
 	{
@@ -208,7 +231,7 @@ void gameManager::RenderFrame(ID3D11DeviceContext* context, ID3D11RenderTargetVi
 
 	context->ClearDepthStencilView(zBuffer, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
 
-	////Set vertex buffer
+	//Set vertex buffer
 	//UINT stride = sizeof(POS_COL_TEX_NORM_VERTEX);
 	//UINT offset = 0;
 	//context->IASetVertexBuffers(0, 1, &m_pVertexBuffer, &stride, &offset);
@@ -287,11 +310,6 @@ void gameManager::RenderFrame(ID3D11DeviceContext* context, ID3D11RenderTargetVi
 			//context->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
 			//context->Draw(36, 0);
-			m_pCube->SetXPos(x_index);
-			m_pCube->SetZPos(z_index);
-			m_pCube->SetYPos(floor);
-
-			m_pCube->Draw(&view, &projection);
 		}
 	}
 
@@ -309,7 +327,7 @@ void gameManager::RenderFrame(ID3D11DeviceContext* context, ID3D11RenderTargetVi
 
 	// RENDER TEXT HERE
 
-	m_UIText->AddText("Health: here", -1.0f, +1.0f, 0.1f);
+	m_UIText->AddText("SWEET DREAMS", -1.0f, +1.0f, 0.1f);
 	m_UIText->RenderText();
 
 	// Display what has just been rendered

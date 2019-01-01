@@ -22,7 +22,7 @@ private:
 		m_jumpSpeed;
 	XMVECTOR m_position,
 		m_lookat,
-		m_up;
+		m_up = XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
 
 	void updateDifference();
 public:
