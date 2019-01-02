@@ -16,6 +16,8 @@ private:
 	ID3D11DeviceContext*		m_pImmediateContext;
 
 	ID3D11ShaderResourceView*	m_pTexture;
+	ID3D11SamplerState*			m_pSampler;
+
 	ObjFileModel*				m_pObject;
 	ID3D11VertexShader*			m_pVShader;
 	ID3D11PixelShader*			m_pPShader;

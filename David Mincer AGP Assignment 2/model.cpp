@@ -106,7 +106,7 @@ HRESULT model::LoadObjModel(char * filename)
 
 	m_pImmediateContext->IASetInputLayout(m_pInputLayout);
 
-	// Create constant buffer
+	//Create constant buffer
 	D3D11_BUFFER_DESC constant_buffer_desc;
 	ZeroMemory(&constant_buffer_desc, sizeof(constant_buffer_desc));
 
@@ -117,6 +117,17 @@ HRESULT model::LoadObjModel(char * filename)
 	hr = m_pD3DDevice->CreateBuffer(&constant_buffer_desc, NULL, &m_pConstantBuffer);
 
 	if (FAILED(hr)) return hr;
+
+	//Create sampler
+	D3D11_SAMPLER_DESC sampler_desc;
+	ZeroMemory(&sampler_desc, sizeof(sampler_desc));
+	sampler_desc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
+	sampler_desc.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
+	sampler_desc.AddressV = D3D11_TEXTURE_ADDRESS_WRAP;
+	sampler_desc.AddressW = D3D11_TEXTURE_ADDRESS_WRAP;
+	sampler_desc.MaxLOD = D3D11_FLOAT32_MAX;
+
+	m_pD3DDevice->CreateSamplerState(&sampler_desc, &m_pSampler);
 
 	return S_OK;
 }
@@ -150,12 +161,13 @@ void model::Draw(XMMATRIX * view, XMMATRIX * projection)
 	model_cb_values.WorldViewProjection = world * (*view) * (*projection);
 	model_transpose = XMMatrixTranspose(world);
 
+	//Sets model constant buffer directional lighting
 	model_cb_values.directional_light_colour = m_directional_light_colour;
 	model_cb_values.ambient_light_colour = m_ambient_light_colour;
 	model_cb_values.directional_light_vector = XMVector3Transform(m_directional_light_shines_from, model_transpose);
 	model_cb_values.directional_light_vector = XMVector3Normalize(model_cb_values.directional_light_vector);
 	
-	// upload new values for constant buffer
+	//Upload new values for constant buffer
 	m_pImmediateContext->VSSetConstantBuffers(0, 1, &m_pConstantBuffer);
 	m_pImmediateContext->UpdateSubresource(
 		m_pConstantBuffer,
@@ -165,9 +177,17 @@ void model::Draw(XMMATRIX * view, XMMATRIX * projection)
 		0,
 		0);
 
+	//Select which primitive type to use
+	m_pImmediateContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+
+	//Set sampler and texture as active
+	m_pImmediateContext->PSSetSamplers(0, 1, &m_pSampler);
+	m_pImmediateContext->PSSetShaderResources(0, 1, &m_pTexture);
+
 	//Set the shader objects as active
 	m_pImmediateContext->VSSetShader(m_pVShader, 0, 0);
 	m_pImmediateContext->PSSetShader(m_pPShader, 0, 0);
+
 	//Set the input layout as active
 	m_pImmediateContext->IASetInputLayout(m_pInputLayout);
 

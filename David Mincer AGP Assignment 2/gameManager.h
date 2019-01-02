@@ -51,9 +51,11 @@ private:
 								m_directional_light_colour = XMVectorSet(0.9f, 0.3f, 0.05f, 1.0f),
 								m_ambient_light_colour = XMVectorSet(0.3f, 0.3f, 0.3f, 1.0f);
 	Text2D*						m_UIText = nullptr;
-	model*						m_pModel;
-	float						gravity = 0.000005f,
+	model						*m_pModel,
+								*m_pLava;
+	float						gravity = 0.00002f,
 								lightZ = 45.0f,
+								m_floorY = -2.0f,
 								rgba_clear_colour[4] = { 0.82f, 0.15f, 0.03f, 1.0f };
 	const int					CONSTANT_BUFFER_SIZE = 112;
 
