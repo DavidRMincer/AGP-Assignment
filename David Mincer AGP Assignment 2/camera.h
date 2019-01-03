@@ -19,7 +19,8 @@ private:
 		m_jumpVelocity,
 		m_walkSpeed,
 		m_rotationSpeed,
-		m_jumpSpeed;
+		m_jumpSpeed,
+		m_maxPitch = 75.0f;
 	XMVECTOR m_position,
 		m_lookat,
 		m_up = XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);

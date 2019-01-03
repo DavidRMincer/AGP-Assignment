@@ -30,10 +30,22 @@ HRESULT gameManager::InitialiseGraphics(ID3D11Device * device, ID3D11DeviceConte
 
 	m_pModel = new model(device, context);
 	m_pModel->AddTexture((char*)"Assets/Rock_Tex.jpg");
+	m_pModel->AddSampler(
+		D3D11_FILTER_MIN_MAG_MIP_LINEAR,
+		D3D11_TEXTURE_ADDRESS_WRAP,
+		D3D11_TEXTURE_ADDRESS_WRAP,
+		D3D11_TEXTURE_ADDRESS_WRAP,
+		D3D11_FLOAT32_MAX);
 	m_pModel->LoadObjModel((char*)"Assets/Sphere.obj");
 
 	m_pLava = new model(device, context);
 	m_pLava->AddTexture((char*)"Assets/Lava_Tex.jpg");
+	m_pLava->AddSampler(
+		D3D11_FILTER_MIN_MAG_MIP_LINEAR,
+		D3D11_TEXTURE_ADDRESS_WRAP,
+		D3D11_TEXTURE_ADDRESS_WRAP,
+		D3D11_TEXTURE_ADDRESS_WRAP,
+		D3D11_FLOAT32_MAX);
 	m_pLava->LoadObjModel((char*)"Assets/cube.obj");
 
 	//Define vertices of a triangle - screen coordinates -1.0 to +1.0
@@ -227,6 +239,8 @@ void gameManager::RenderFrame(ID3D11DeviceContext* context, ID3D11RenderTargetVi
 	XMMATRIX projection,
 		world,
 		view = m_pCamera->GetViewMatrix();
+	XMMATRIX transpose;
+	CONSTANT_BUFFER0 cb0_values;
 
 	projection = XMMatrixPerspectiveFovLH(
 		XMConvertToRadians(45.0),
@@ -244,12 +258,7 @@ void gameManager::RenderFrame(ID3D11DeviceContext* context, ID3D11RenderTargetVi
 	UINT offset = 0;
 	context->IASetVertexBuffers(0, 1, &m_pVertexBuffer, &stride, &offset);*/
 
-	XMMATRIX transpose;
-	CONSTANT_BUFFER0 cb0_values;
-
-
 	//world = XMMatrixRotationZ(15);
-	//
 	/*cb0_values.WorldViewProjection = world * view * projection;
 	transpose = XMMatrixTranspose(world);*/ //model world matrix
 

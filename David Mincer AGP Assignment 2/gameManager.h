@@ -55,7 +55,7 @@ private:
 								*m_pLava;
 	float						gravity = 0.00002f,
 								lightZ = 45.0f,
-								m_floorY = -2.0f,
+								m_floorY = -3.0f,
 								rgba_clear_colour[4] = { 0.82f, 0.15f, 0.03f, 1.0f };
 	const int					CONSTANT_BUFFER_SIZE = 112;
 

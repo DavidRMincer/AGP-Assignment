@@ -119,7 +119,7 @@ HRESULT model::LoadObjModel(char * filename)
 	if (FAILED(hr)) return hr;
 
 	//Create sampler
-	D3D11_SAMPLER_DESC sampler_desc;
+	/*D3D11_SAMPLER_DESC sampler_desc;
 	ZeroMemory(&sampler_desc, sizeof(sampler_desc));
 	sampler_desc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
 	sampler_desc.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
@@ -127,7 +127,7 @@ HRESULT model::LoadObjModel(char * filename)
 	sampler_desc.AddressW = D3D11_TEXTURE_ADDRESS_WRAP;
 	sampler_desc.MaxLOD = D3D11_FLOAT32_MAX;
 
-	m_pD3DDevice->CreateSamplerState(&sampler_desc, &m_pSampler);
+	m_pD3DDevice->CreateSamplerState(&sampler_desc, &m_pSampler);*/
 
 	return S_OK;
 }
@@ -206,6 +206,19 @@ void model::AddTexture(char * filename)
 		NULL,
 		&m_pTexture,
 		NULL);
+}
+
+void model::AddSampler(D3D11_FILTER filter, D3D11_TEXTURE_ADDRESS_MODE u, D3D11_TEXTURE_ADDRESS_MODE v, D3D11_TEXTURE_ADDRESS_MODE w, float maxLOD)
+{
+	D3D11_SAMPLER_DESC sampler_desc;
+	ZeroMemory(&sampler_desc, sizeof(sampler_desc));
+	sampler_desc.Filter = filter;
+	sampler_desc.AddressU = u;
+	sampler_desc.AddressV = v;
+	sampler_desc.AddressW = w;
+	sampler_desc.MaxLOD = maxLOD;
+
+	m_pD3DDevice->CreateSamplerState(&sampler_desc, &m_pSampler);
 }
 
 //////////////////////////////////////////////////////////////////////////////////////
@@ -423,11 +436,9 @@ void model::AddScale(float s)
 
 model::~model()
 {
-	if (m_pTexture)
-	{
-		delete m_pTexture;
-		m_pTexture = NULL;
-	}
+	if (m_pSampler) m_pSampler->Release();
+	if (m_pTexture) m_pTexture->Release();
+
 	if (m_pObject)
 	{
 		delete m_pObject;

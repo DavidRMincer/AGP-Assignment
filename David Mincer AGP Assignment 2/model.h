@@ -42,6 +42,9 @@ public:
 	HRESULT LoadObjModel(char* filename);
 	void Draw(XMMATRIX* view, XMMATRIX* projection);
 	void AddTexture(char* filename);
+	void AddSampler(D3D11_FILTER filter, D3D11_TEXTURE_ADDRESS_MODE u,
+		D3D11_TEXTURE_ADDRESS_MODE v, D3D11_TEXTURE_ADDRESS_MODE w,
+		float maxLOD);
 
 	//////////////////////////////////////////////////////////////////////////////////////
 	//	Sets values

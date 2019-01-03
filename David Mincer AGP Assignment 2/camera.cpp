@@ -116,8 +116,8 @@ void camera::Pitch(float degrees)
 {
 	m_dy += sin(XMConvertToRadians(degrees * m_rotationSpeed));
 
-	if (XMConvertToDegrees(m_dy) > 80.0f) m_dy = XMConvertToRadians(80.0f);
-	else if (XMConvertToDegrees(m_dy) < -80.0f) m_dy = XMConvertToRadians(-80.0f);
+	if (XMConvertToDegrees(m_dy) > m_maxPitch) m_dy = XMConvertToRadians(m_maxPitch);
+	else if (XMConvertToDegrees(m_dy) < -m_maxPitch) m_dy = XMConvertToRadians(-m_maxPitch);
 }
 
 XMMATRIX camera::GetViewMatrix()
