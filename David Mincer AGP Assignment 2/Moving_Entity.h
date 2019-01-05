@@ -5,10 +5,8 @@ class Moving_Entity :
 {
 protected:
 	float	m_rotation,
-			m_walkSpeed,
-			m_rotationSpeed;
+			m_walkSpeed;
 
-	void updateDifference();
 public:
 	Moving_Entity();
 	void Forward(void);

@@ -11,18 +11,19 @@
 #include "text2D.h"
 #include "Input.h"
 #include "model.h"
+#include "skybox.h"
 
 
 
 
 // Define vertex structure
-struct POS_COL_TEX_NORM_VERTEX//This will be added to and renamed in future tutorials
-{
-	XMFLOAT3	pos;
-	XMFLOAT4	Col;
-	XMFLOAT2	Texture0;
-	XMFLOAT3	Normal;
-};
+//struct POS_COL_TEX_NORM_VERTEX//This will be added to and renamed in future tutorials
+//{
+//	XMFLOAT3	pos;
+//	XMFLOAT4	Col;
+//	XMFLOAT2	Texture0;
+//	XMFLOAT3	Normal;
+//};
 
 // Const buffer structs. Pack to 16 bytes. Don't let any single element cross a 16 byte boundary
 struct CONSTANT_BUFFER0
@@ -53,7 +54,8 @@ private:
 	Text2D*						m_UIText = nullptr;
 	model						*m_pModel,
 								*m_pLava;
-	float						gravity = 0.00002f,
+	skybox*						m_pSkybox;
+	float						gravity = 0.00007f,
 								lightZ = 45.0f,
 								m_floorY = -3.0f,
 								rgba_clear_colour[4] = { 0.82f, 0.15f, 0.03f, 1.0f };

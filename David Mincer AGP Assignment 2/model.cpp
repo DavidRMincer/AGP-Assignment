@@ -139,6 +139,7 @@ void model::Draw(XMMATRIX * view, XMMATRIX * projection)
 {
 	XMMATRIX world,
 		model_transpose;
+	MODEL_CONSTANT_BUFFER model_cb_values;
 
 	//Scale
 	world = XMMatrixScaling(
@@ -157,7 +158,6 @@ void model::Draw(XMMATRIX * view, XMMATRIX * projection)
 		m_z);
 
 	//Create model constant buffer
-	MODEL_CONSTANT_BUFFER model_cb_values;
 	model_cb_values.WorldViewProjection = world * (*view) * (*projection);
 	model_transpose = XMMatrixTranspose(world);
 

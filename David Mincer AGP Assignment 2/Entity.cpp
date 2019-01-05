@@ -57,6 +57,28 @@ void Entity::MoveZPos(float z)
 	m_z += z;
 }
 
+void Entity::Pitch(float degrees)
+{
+	m_xAngle += degrees;
+
+	m_dy = sin(XMConvertToRadians(m_xAngle));
+
+	if (XMConvertToDegrees(m_dy) > m_maxPitch) m_dy = XMConvertToRadians(m_maxPitch);
+	else if (XMConvertToDegrees(m_dy) < -m_maxPitch) m_dy = XMConvertToRadians(-m_maxPitch);
+	
+	if (m_pModel) m_pModel->SetXAngle(m_dy);
+}
+
+void Entity::Yaw(float degrees)
+{
+	m_yAngle += degrees;
+
+	m_dx = sin(m_yAngle * (XM_PI / 180));
+	m_dz = cos(m_yAngle * (XM_PI / 180));
+
+	if (m_pModel) m_pModel->SetYAngle(m_yAngle);
+}
+
 Entity::~Entity()
 {
 }

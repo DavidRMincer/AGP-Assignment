@@ -42,11 +42,15 @@
     <ClCompile Include="Moving_Entity.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="skybox.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="text2D_shaders.hlsl" />
     <FxCompile Include="shaders.hlsl" />
     <FxCompile Include="model_shaders.hlsl" />
+    <FxCompile Include="sky_shaders.hlsl" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="camera.h">
@@ -71,6 +75,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Moving_Entity.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="skybox.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

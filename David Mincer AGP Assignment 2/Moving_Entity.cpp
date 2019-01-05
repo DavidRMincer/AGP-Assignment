@@ -2,12 +2,6 @@
 
 
 
-void Moving_Entity::updateDifference()
-{
-	m_dx = sin(m_rotation * (XM_PI / 180));
-	m_dz = cos(m_rotation * (XM_PI / 180));
-}
-
 Moving_Entity::Moving_Entity()
 {
 }
