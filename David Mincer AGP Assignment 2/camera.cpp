@@ -8,12 +8,8 @@ void camera::updateDifference()
 	m_dz = cos(m_rotation * (XM_PI / 180));
 }
 
-camera::camera()
-{
-}
-
 camera::camera(float x, float y, float z, float rotation,
-	float walkSpeed, float rotationSpeed, float jumpSpeed)
+	float walkSpeed, float rotationSpeed, float jumpSpeed) : Moving_Entity (nullptr, nullptr)
 {
 	m_x = x;
 	m_y = y;

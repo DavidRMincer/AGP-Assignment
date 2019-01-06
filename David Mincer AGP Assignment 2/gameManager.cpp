@@ -36,16 +36,21 @@ HRESULT gameManager::InitialiseGraphics(ID3D11Device * device, ID3D11DeviceConte
 		context);
 	m_pSkybox->InitSkybox();
 
-	//Load model
-	m_pModel = new model(device, context);
-	m_pModel->AddTexture((char*)"Assets/Rock_Tex.jpg");
-	m_pModel->AddSampler(
+	//Load demon
+	m_pDemon = new Moving_Entity(device, context);
+	m_pDemon->GetModel()->AddTexture((char*)"Assets/DemonSkin_Tex.jpg");
+	m_pDemon->GetModel()->AddSampler(
 		D3D11_FILTER_MIN_MAG_MIP_LINEAR,
 		D3D11_TEXTURE_ADDRESS_WRAP,
 		D3D11_TEXTURE_ADDRESS_WRAP,
 		D3D11_TEXTURE_ADDRESS_WRAP,
 		D3D11_FLOAT32_MAX);
-	m_pModel->LoadObjModel((char*)"Assets/Sphere.obj");
+	m_pDemon->GetModel()->LoadObjModel((char*)"Assets/Sphere.obj");
+
+	m_pDemon->SetXPos(0);
+	m_pDemon->SetZPos(7);
+	m_pDemon->SetYPos(0);
+	m_pDemon->Yaw(180);
 
 	//Load lava floor model
 	m_pLava = new model(device, context);
@@ -277,27 +282,27 @@ void gameManager::RenderFrame(ID3D11DeviceContext* context, ID3D11RenderTargetVi
 	context->IASetVertexBuffers(0, 1, &m_pVertexBuffer, &stride, &offset);*/
 
 	//world = XMMatrixRotationZ(15);
-	/*cb0_values.WorldViewProjection = world * view * projection;
-	transpose = XMMatrixTranspose(world);*/ //model world matrix
+	cb0_values.WorldViewProjection = world * view * projection;
+	transpose = XMMatrixTranspose(world); //model world matrix
 
-	//cb0_values.directional_light_colour = m_directional_light_colour;
-	//cb0_values.ambient_light_colour = m_ambient_light_colour;
-	//cb0_values.directional_light_vector = XMVector3Transform(m_directional_light_shines_from, transpose);
-	//cb0_values.directional_light_vector = XMVector3Normalize(cb0_values.directional_light_vector);
+	cb0_values.directional_light_colour = m_directional_light_colour;
+	cb0_values.ambient_light_colour = m_ambient_light_colour;
+	cb0_values.directional_light_vector = XMVector3Transform(m_directional_light_shines_from, transpose);
+	cb0_values.directional_light_vector = XMVector3Normalize(cb0_values.directional_light_vector);
 
-	 //upload new values for constant buffer
-	//context->UpdateSubresource(m_pConstantBuffer0, 0, 0, &cb0_values, 0, 0);
-	//context->VSSetConstantBuffers(0, 1, &m_pConstantBuffer0);
+	//upload new values for constant buffer
+	context->UpdateSubresource(m_pConstantBuffer0, 0, 0, &cb0_values, 0, 0);
+	context->VSSetConstantBuffers(0, 1, &m_pConstantBuffer0);
 
 	//Select which primitive type to use
-	//context->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+	context->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
-	//context->PSSetSamplers(0, 1, &m_pSampler0);
-	//context->PSSetShaderResources(0, 1, &m_pTexture0);
+	context->PSSetSamplers(0, 1, &m_pSampler0);
+	context->PSSetShaderResources(0, 1, &m_pTexture0);
 
-	//context->VSSetShader(m_pVertexShader, 0, 0);
-	//context->PSSetShader(m_pPixelShader, 0, 0);
-	//context->IASetInputLayout(m_pInputLayout);
+	context->VSSetShader(m_pVertexShader, 0, 0);
+	context->PSSetShader(m_pPixelShader, 0, 0);
+	context->IASetInputLayout(m_pInputLayout);
 
 	//Draw vertex buffer to back buffer
 	//context->Draw(36, 0);
@@ -354,17 +359,12 @@ void gameManager::RenderFrame(ID3D11DeviceContext* context, ID3D11RenderTargetVi
 	}
 
 	//Render sphere
-	m_pModel->SetXAngle(20);
-	m_pModel->SetXPos(0);
-	m_pModel->SetZPos(7);
-	m_pModel->SetYPos(1);
-
-	m_pModel->SetDirectionalLight(
+	m_pDemon->GetModel()->SetDirectionalLight(
 		m_directional_light_shines_from,
 		m_directional_light_colour,
 		m_ambient_light_colour);
 
-	m_pModel->Draw(&view, &projection);
+	m_pDemon->GetModel()->Draw(&view, &projection);
 
 	//Render skybox
 	m_pSkybox->Draw(
@@ -403,6 +403,9 @@ void gameManager::UpdateLogic(HWND* hWindow)
 
 	//Apply gravity
 	m_pCamera->UpdateVelocity(gravity, 0.0f);
+
+	//Update demons
+	m_pDemon->LookAt(m_pCamera);
 }
 
 //////////////////////////////////////////////////////////////////////////////////////
@@ -419,10 +422,10 @@ void gameManager::RunGameLoop(HWND* hWindow, ID3D11DeviceContext* context, ID3D1
 //////////////////////////////////////////////////////////////////////////////////////
 void gameManager::ShutdownD3D()
 {
-	if (m_pModel)
+	if (m_pDemon)
 	{
-		m_pModel = NULL;
-		delete m_pModel;
+		m_pDemon = NULL;
+		delete m_pDemon;
 	}
 
 	if (m_pInputLayout)			m_pInputLayout->Release();

@@ -5,14 +5,16 @@ class Moving_Entity :
 {
 protected:
 	float	m_rotation,
-			m_walkSpeed;
+			m_walkSpeed,
+			m_rotationSpeed = 0.001f;
 
 public:
-	Moving_Entity();
+	Moving_Entity(ID3D11Device* device, ID3D11DeviceContext* context);
 	void Forward(void);
 	void Backward(void);
 	void StrafeLeft(void);
 	void StrafeRight(void);
+	void LookAt(Entity* target);
 	~Moving_Entity();
 };
 

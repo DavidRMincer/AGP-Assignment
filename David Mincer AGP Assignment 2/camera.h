@@ -18,7 +18,6 @@ private:
 	void updateDifference();
 
 public:
-	camera();
 	camera(float x, float y, float z, float rotation,
 		float walkSpeed, float rotationSpeed, float jumpSpeed);
 	void Up(float distance);

@@ -2,23 +2,30 @@
 
 
 
-Entity::Entity()
+Entity::Entity(ID3D11Device * device, ID3D11DeviceContext * context)
 {
+	m_pModel = new model(device, context);
 }
 
 void Entity::SetXPos(float x)
 {
 	m_x = x;
+
+	if (m_pModel) m_pModel->SetXPos(x);
 }
 
 void Entity::SetYPos(float y)
 {
 	m_y = y;
+
+	if (m_pModel) m_pModel->SetYPos(y);
 }
 
 void Entity::SetZPos(float z)
 {
 	m_z = z;
+
+	if (m_pModel) m_pModel->SetZPos(z);
 }
 
 
@@ -45,16 +52,22 @@ model * Entity::GetModel(void)
 void Entity::MoveXPos(float x)
 {
 	m_x += x;
+
+	if (m_pModel) m_pModel->AddXPos(x);
 }
 
 void Entity::MoveYPos(float y)
 {
 	m_y += y;
+
+	if (m_pModel) m_pModel->AddYPos(y);
 }
 
 void Entity::MoveZPos(float z)
 {
 	m_z += z;
+
+	if (m_pModel) m_pModel->AddZPos(z);
 }
 
 void Entity::Pitch(float degrees)

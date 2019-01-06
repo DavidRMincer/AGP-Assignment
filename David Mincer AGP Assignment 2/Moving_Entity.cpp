@@ -2,7 +2,7 @@
 
 
 
-Moving_Entity::Moving_Entity()
+Moving_Entity::Moving_Entity(ID3D11Device * device, ID3D11DeviceContext * context) : Entity (device, context)
 {
 }
 
@@ -34,6 +34,25 @@ void Moving_Entity::StrafeRight(void)
 
 	m_x += direction.x * m_walkSpeed;
 	m_z += direction.z * m_walkSpeed;
+}
+
+void Moving_Entity::LookAt(Entity * target)
+{
+	float xDist,
+		zDist,
+		magnitude,
+		modelMagnitude,
+		angle;
+
+	//Get distance from target
+	xDist = target->GetXPos() - m_x;
+	zDist = target->GetZPos() - m_z;
+
+	//Set angle
+	angle = atan2(xDist, zDist) * m_rotationSpeed;
+
+	//Rotate
+	Yaw(angle);
 }
 
 

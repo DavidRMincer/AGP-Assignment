@@ -25,7 +25,7 @@ protected:
 	model		*m_pModel;
 
 public:
-	Entity();
+	Entity(ID3D11Device* device, ID3D11DeviceContext* context);
 
 	//////////////////////////////////////////////////////////////////////////////////////
 	//	Sets values
