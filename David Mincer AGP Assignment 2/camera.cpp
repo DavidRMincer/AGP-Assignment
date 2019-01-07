@@ -57,7 +57,6 @@ XMMATRIX camera::GetViewMatrix()
 {
 	m_position = XMVectorSet(m_x, m_y, m_z, 0.0f);
 	m_lookat = XMVectorSet(m_x + m_dx, m_y + m_dy, m_z + m_dz, 0.0f);
-	m_up;
 
 	XMMATRIX viewMat = XMMatrixLookAtLH(m_position, m_lookat, m_up);
 
