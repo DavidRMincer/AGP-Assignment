@@ -1,4 +1,4 @@
-﻿  model.cpp
+﻿  Map.cpp
 c:\program files (x86)\microsoft directx sdk (june 2010)\include\xnamath.h(2662): warning C4838: conversion from 'unsigned int' to 'INT' requires a narrowing conversion
 c:\program files (x86)\microsoft directx sdk (june 2010)\include\xnamath.h(2663): warning C4838: conversion from 'unsigned int' to 'INT' requires a narrowing conversion
 c:\program files (x86)\microsoft directx sdk (june 2010)\include\xnamath.h(2664): warning C4838: conversion from 'unsigned int' to 'INT' requires a narrowing conversion
@@ -27,37 +27,16 @@ c:\program files (x86)\microsoft directx sdk (june 2010)\include\xnamath.h(2732)
 c:\program files (x86)\microsoft directx sdk (june 2010)\include\xnamath.h(2742): warning C4838: conversion from 'unsigned int' to 'INT' requires a narrowing conversion
 c:\program files (x86)\microsoft directx sdk (june 2010)\include\xnamath.h(2743): warning C4838: conversion from 'unsigned int' to 'INT' requires a narrowing conversion
 c:\program files (x86)\microsoft directx sdk (june 2010)\include\xnamath.h(2754): warning C4838: conversion from 'unsigned int' to 'INT' requires a narrowing conversion
-  Moving_Entity.cpp
-c:\program files (x86)\microsoft directx sdk (june 2010)\include\xnamath.h(2662): warning C4838: conversion from 'unsigned int' to 'INT' requires a narrowing conversion
-c:\program files (x86)\microsoft directx sdk (june 2010)\include\xnamath.h(2663): warning C4838: conversion from 'unsigned int' to 'INT' requires a narrowing conversion
-c:\program files (x86)\microsoft directx sdk (june 2010)\include\xnamath.h(2664): warning C4838: conversion from 'unsigned int' to 'INT' requires a narrowing conversion
-c:\program files (x86)\microsoft directx sdk (june 2010)\include\xnamath.h(2665): warning C4838: conversion from 'unsigned int' to 'INT' requires a narrowing conversion
-c:\program files (x86)\microsoft directx sdk (june 2010)\include\xnamath.h(2666): warning C4838: conversion from 'unsigned int' to 'INT' requires a narrowing conversion
-c:\program files (x86)\microsoft directx sdk (june 2010)\include\xnamath.h(2667): warning C4838: conversion from 'unsigned int' to 'INT' requires a narrowing conversion
-c:\program files (x86)\microsoft directx sdk (june 2010)\include\xnamath.h(2668): warning C4838: conversion from 'unsigned int' to 'INT' requires a narrowing conversion
-c:\program files (x86)\microsoft directx sdk (june 2010)\include\xnamath.h(2689): warning C4838: conversion from 'unsigned int' to 'INT' requires a narrowing conversion
-c:\program files (x86)\microsoft directx sdk (june 2010)\include\xnamath.h(2690): warning C4838: conversion from 'unsigned int' to 'INT' requires a narrowing conversion
-c:\program files (x86)\microsoft directx sdk (june 2010)\include\xnamath.h(2691): warning C4838: conversion from 'unsigned int' to 'INT' requires a narrowing conversion
-c:\program files (x86)\microsoft directx sdk (june 2010)\include\xnamath.h(2694): warning C4838: conversion from 'unsigned int' to 'INT' requires a narrowing conversion
-c:\program files (x86)\microsoft directx sdk (june 2010)\include\xnamath.h(2695): warning C4838: conversion from 'unsigned int' to 'INT' requires a narrowing conversion
-c:\program files (x86)\microsoft directx sdk (june 2010)\include\xnamath.h(2698): warning C4838: conversion from 'unsigned int' to 'INT' requires a narrowing conversion
-c:\program files (x86)\microsoft directx sdk (june 2010)\include\xnamath.h(2702): warning C4838: conversion from 'unsigned int' to 'INT' requires a narrowing conversion
-c:\program files (x86)\microsoft directx sdk (june 2010)\include\xnamath.h(2712): warning C4838: conversion from 'unsigned int' to 'INT' requires a narrowing conversion
-c:\program files (x86)\microsoft directx sdk (june 2010)\include\xnamath.h(2713): warning C4838: conversion from 'unsigned int' to 'INT' requires a narrowing conversion
-c:\program files (x86)\microsoft directx sdk (june 2010)\include\xnamath.h(2715): warning C4838: conversion from 'unsigned int' to 'INT' requires a narrowing conversion
-c:\program files (x86)\microsoft directx sdk (june 2010)\include\xnamath.h(2716): warning C4838: conversion from 'unsigned int' to 'INT' requires a narrowing conversion
-c:\program files (x86)\microsoft directx sdk (june 2010)\include\xnamath.h(2717): warning C4838: conversion from 'unsigned int' to 'INT' requires a narrowing conversion
-c:\program files (x86)\microsoft directx sdk (june 2010)\include\xnamath.h(2727): warning C4838: conversion from 'unsigned int' to 'INT' requires a narrowing conversion
-c:\program files (x86)\microsoft directx sdk (june 2010)\include\xnamath.h(2728): warning C4838: conversion from 'unsigned int' to 'INT' requires a narrowing conversion
-c:\program files (x86)\microsoft directx sdk (june 2010)\include\xnamath.h(2729): warning C4838: conversion from 'unsigned int' to 'INT' requires a narrowing conversion
-c:\program files (x86)\microsoft directx sdk (june 2010)\include\xnamath.h(2730): warning C4838: conversion from 'unsigned int' to 'INT' requires a narrowing conversion
-c:\program files (x86)\microsoft directx sdk (june 2010)\include\xnamath.h(2731): warning C4838: conversion from 'unsigned int' to 'INT' requires a narrowing conversion
-c:\program files (x86)\microsoft directx sdk (june 2010)\include\xnamath.h(2732): warning C4838: conversion from 'unsigned int' to 'INT' requires a narrowing conversion
-c:\program files (x86)\microsoft directx sdk (june 2010)\include\xnamath.h(2742): warning C4838: conversion from 'unsigned int' to 'INT' requires a narrowing conversion
-c:\program files (x86)\microsoft directx sdk (june 2010)\include\xnamath.h(2743): warning C4838: conversion from 'unsigned int' to 'INT' requires a narrowing conversion
-c:\program files (x86)\microsoft directx sdk (june 2010)\include\xnamath.h(2754): warning C4838: conversion from 'unsigned int' to 'INT' requires a narrowing conversion
-c:\users\dave-id\documents\github\agp-assignment\david mincer agp assignment 2\moving_entity.cpp(43): warning C4101: 'magnitude': unreferenced local variable
-c:\users\dave-id\documents\github\agp-assignment\david mincer agp assignment 2\moving_entity.cpp(44): warning C4101: 'modelMagnitude': unreferenced local variable
-  Generating Code...
+c:\users\dave-id\documents\github\agp-assignment\david mincer agp assignment 2\map.cpp(62): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
+c:\users\dave-id\documents\github\agp-assignment\david mincer agp assignment 2\map.cpp(63): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
+c:\users\dave-id\documents\github\agp-assignment\david mincer agp assignment 2\map.cpp(74): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+c:\users\dave-id\documents\github\agp-assignment\david mincer agp assignment 2\map.cpp(76): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+c:\users\dave-id\documents\github\agp-assignment\david mincer agp assignment 2\map.cpp(78): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+c:\users\dave-id\documents\github\agp-assignment\david mincer agp assignment 2\map.cpp(82): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+c:\users\dave-id\documents\github\agp-assignment\david mincer agp assignment 2\map.cpp(84): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+c:\users\dave-id\documents\github\agp-assignment\david mincer agp assignment 2\map.cpp(86): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+c:\users\dave-id\documents\github\agp-assignment\david mincer agp assignment 2\map.cpp(90): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+c:\users\dave-id\documents\github\agp-assignment\david mincer agp assignment 2\map.cpp(91): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+c:\users\dave-id\documents\github\agp-assignment\david mincer agp assignment 2\map.cpp(95): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
 text2D.obj : warning LNK4204: 'C:\Users\Dave-id\Documents\GitHub\AGP-Assignment\David Mincer AGP Assignment 2\x64\Debug\vc141.pdb' is missing debugging information for referencing module; linking object as if no debug info
   David Mincer AGP Assignment 2.vcxproj -> C:\Users\Dave-id\Documents\GitHub\AGP-Assignment\David Mincer AGP Assignment 2\x64\Debug\David Mincer AGP Assignment 2.exe

@@ -9,7 +9,7 @@ protected:
 			m_rotationSpeed = 0.001f;
 
 public:
-	Moving_Entity(ID3D11Device* device, ID3D11DeviceContext* context);
+	Moving_Entity();
 	void Forward(void);
 	void Backward(void);
 	void StrafeLeft(void);

@@ -9,7 +9,7 @@ void camera::updateDifference()
 }
 
 camera::camera(float x, float y, float z, float rotation,
-	float walkSpeed, float rotationSpeed, float jumpSpeed) : Moving_Entity (nullptr, nullptr)
+	float walkSpeed, float rotationSpeed, float jumpSpeed)
 {
 	m_x = x;
 	m_y = y;

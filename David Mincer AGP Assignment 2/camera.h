@@ -1,5 +1,5 @@
 #pragma once
-#include "Moving_Entity.h"
+#include "Character.h"
 #include <d3d11.h>
 #include <math.h>
 #define _XM_NO_INTRINSICS_
@@ -7,7 +7,7 @@
 #include <xnamath.h>
 
 class camera :
-	public Moving_Entity
+	public Character
 {
 private:
 	bool m_jumping;

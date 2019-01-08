@@ -2,9 +2,13 @@
 
 
 
-Entity::Entity(ID3D11Device * device, ID3D11DeviceContext * context)
+Entity::Entity()
 {
-	m_pModel = new model(device, context);
+}
+
+void Entity::AddModel(model * model)
+{
+	m_pModel = model;
 }
 
 void Entity::SetXPos(float x)

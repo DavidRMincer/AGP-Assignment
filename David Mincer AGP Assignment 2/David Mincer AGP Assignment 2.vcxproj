@@ -142,6 +142,7 @@
     <ClCompile Include="gameManager.cpp" />
     <ClCompile Include="Input.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Map.cpp" />
     <ClCompile Include="model.cpp" />
     <ClCompile Include="Moving_Entity.cpp" />
     <ClCompile Include="objfilemodel.cpp" />
@@ -182,6 +183,7 @@
     <ClInclude Include="Entity.h" />
     <ClInclude Include="gameManager.h" />
     <ClInclude Include="Input.h" />
+    <ClInclude Include="Map.h" />
     <ClInclude Include="model.h" />
     <ClInclude Include="Moving_Entity.h" />
     <ClInclude Include="objfilemodel.h" />

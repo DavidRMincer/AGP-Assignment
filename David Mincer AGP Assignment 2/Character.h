@@ -14,7 +14,7 @@ protected:
 				m_zHand;
 
 public:
-	Character(ID3D11Device* device, ID3D11DeviceContext* context);
+	Character();
 	~Character();
 };
 

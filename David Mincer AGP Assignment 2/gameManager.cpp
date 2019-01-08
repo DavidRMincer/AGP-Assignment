@@ -37,20 +37,14 @@ HRESULT gameManager::InitialiseGraphics(ID3D11Device * device, ID3D11DeviceConte
 	m_pSkybox->InitSkybox();
 
 	//Load demon
-	m_pDemon = new Moving_Entity(device, context);
-	m_pDemon->GetModel()->AddTexture((char*)"Assets/DemonSkin_Tex.jpg");
-	m_pDemon->GetModel()->AddSampler(
+	m_pDemonModel->AddTexture((char*)"Assets/DemonSkin_Tex.jpg");
+	m_pDemonModel->AddSampler(
 		D3D11_FILTER_MIN_MAG_MIP_LINEAR,
 		D3D11_TEXTURE_ADDRESS_WRAP,
 		D3D11_TEXTURE_ADDRESS_WRAP,
 		D3D11_TEXTURE_ADDRESS_WRAP,
 		D3D11_FLOAT32_MAX);
-	m_pDemon->GetModel()->LoadObjModel((char*)"Assets/Sphere.obj");
-
-	m_pDemon->SetXPos(0);
-	m_pDemon->SetZPos(7);
-	m_pDemon->SetYPos(0);
-	m_pDemon->Yaw(180);
+	m_pDemonModel->LoadObjModel((char*)"Assets/Sphere.obj");
 
 	//Load lava floor model
 	m_pLava = new model(device, context);
@@ -358,14 +352,6 @@ void gameManager::RenderFrame(ID3D11DeviceContext* context, ID3D11RenderTargetVi
 		}
 	}
 
-	//Render sphere
-	m_pDemon->GetModel()->SetDirectionalLight(
-		m_directional_light_shines_from,
-		m_directional_light_colour,
-		m_ambient_light_colour);
-
-	m_pDemon->GetModel()->Draw(&view, &projection);
-
 	//Render skybox
 	m_pSkybox->Draw(
 		&view,
@@ -403,9 +389,6 @@ void gameManager::UpdateLogic(HWND* hWindow)
 
 	//Apply gravity
 	m_pCamera->UpdateVelocity(gravity, 0.0f);
-
-	//Update demons
-	m_pDemon->LookAt(m_pCamera);
 }
 
 //////////////////////////////////////////////////////////////////////////////////////
@@ -422,12 +405,6 @@ void gameManager::RunGameLoop(HWND* hWindow, ID3D11DeviceContext* context, ID3D1
 //////////////////////////////////////////////////////////////////////////////////////
 void gameManager::ShutdownD3D()
 {
-	if (m_pDemon)
-	{
-		m_pDemon = NULL;
-		delete m_pDemon;
-	}
-
 	if (m_pInputLayout)			m_pInputLayout->Release();
 	if (m_pConstantBuffer0)		m_pConstantBuffer0->Release();
 	if (m_pVertexBuffer)		m_pVertexBuffer->Release();

@@ -52,8 +52,8 @@ private:
 								m_directional_light_colour = XMVectorSet(0.9f, 0.3f, 0.05f, 1.0f),
 								m_ambient_light_colour = XMVectorSet(0.3f, 0.3f, 0.3f, 1.0f);
 	Text2D*						m_UIText = nullptr;
-	Moving_Entity*				m_pDemon;
-	model						*m_pLava;
+	model						*m_pLava,
+								*m_pDemonModel;
 	skybox*						m_pSkybox;
 	float						gravity = 0.00007f,
 								lightZ = 45.0f,

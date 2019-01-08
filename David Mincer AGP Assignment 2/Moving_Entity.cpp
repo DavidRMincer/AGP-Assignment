@@ -2,7 +2,7 @@
 
 
 
-Moving_Entity::Moving_Entity(ID3D11Device * device, ID3D11DeviceContext * context) : Entity (device, context)
+Moving_Entity::Moving_Entity()
 {
 }
 
