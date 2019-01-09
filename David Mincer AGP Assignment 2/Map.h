@@ -12,10 +12,11 @@ private:
 	vector<Entity>		m_vectorofRocks;
 	vector<Character>	m_vectorofEnemies;
 
+	model*				m_pEndModel;
+
 	int					m_tileScale,
 						m_width,
 						m_length;
-
 	float				m_xStart,
 						m_yStart,
 						m_zStart,
@@ -24,12 +25,12 @@ private:
 
 	void AddRock(model* rockModel, float x, float y, float z);
 	void AddEnemy(model* enemyModel, float x, float y, float z);
+	void AddEnd(model* endModel, float y);
 
 public:
 	Map(int tileScale, float floor,
-		model* rockModel, model* enemyModel);
-	void DrawRocks(XMMATRIX* view, XMMATRIX* projection);
-	void DrawEnemies(XMMATRIX* view, XMMATRIX* projection);
+		model* rockModel, model* enemyModel, model* endModel);
+	void DrawLevel(XMMATRIX* view, XMMATRIX* projection);
 	void SendtoStart(Entity* entity);
 	bool AtEnd(Entity* entity);
 	~Map();

@@ -33,9 +33,21 @@ void Map::AddEnemy(model * enemyModel, float x, float y, float z)
 }
 
 //////////////////////////////////////////////////////////////////////////////////////
+//	Set end point model
+//////////////////////////////////////////////////////////////////////////////////////
+void Map::AddEnd(model * endModel, float y)
+{
+	m_pEndModel = endModel;
+
+	m_pEndModel->SetXPos(m_xEnd);
+	m_pEndModel->SetYPos(y);
+	m_pEndModel->SetZPos(m_zEnd);
+}
+
+//////////////////////////////////////////////////////////////////////////////////////
 //	Loads map
 //////////////////////////////////////////////////////////////////////////////////////
-Map::Map(int tileScale, float floor, model* rockModel, model* enemyModel)
+Map::Map(int tileScale, float floor, model* rockModel, model* enemyModel, model* endModel)
 {
 	//Create map layout
 	m_map = {	"RRRRR-----------------------------------",
@@ -80,27 +92,49 @@ Map::Map(int tileScale, float floor, model* rockModel, model* enemyModel)
 			{
 			//Set start point
 			case 'S':
-				AddRock(rockModel, x, floor + m_tileScale, z);
+				AddRock(
+					rockModel,
+					x * m_tileScale,
+					floor + m_tileScale,
+					z * m_tileScale);
 
-				m_xStart = x;
+				m_xStart = x * m_tileScale;
 				m_yStart = floor + (m_tileScale * 2);
-				m_zStart = z;
+				m_zStart = z * m_tileScale;
 				break;
 			//Set end point
 			case 'X':
-				AddRock(rockModel, x, floor + m_tileScale, z);
+				AddRock(
+					rockModel,
+					x * m_tileScale,
+					floor + m_tileScale,
+					z * m_tileScale);
 
-				m_xEnd = x;
-				m_zEnd = z;
+				m_xEnd = x * m_tileScale;
+				m_zEnd = z * m_tileScale;
+
+				AddEnd(endModel, floor + (m_tileScale * 2));
 				break;
 			//Add enemy
 			case 'E':
-				AddRock(rockModel, x, floor + m_tileScale, z);
-				AddEnemy(enemyModel, x, floor + (m_tileScale * 2), z);
+				AddRock(
+					rockModel,
+					x * m_tileScale,
+					floor + m_tileScale,
+					z * m_tileScale);
+				AddEnemy(
+					enemyModel,
+					x * m_tileScale,
+					floor + (m_tileScale * 2),
+					z * m_tileScale);
 				break;
 			//Add rock
 			case 'R':
-				AddRock(rockModel, x, floor + m_tileScale, z);
+				AddRock(
+					rockModel,
+					x * m_tileScale,
+					floor + m_tileScale,
+					z * m_tileScale);
 				break;
 			default:
 				break;
@@ -110,27 +144,23 @@ Map::Map(int tileScale, float floor, model* rockModel, model* enemyModel)
 }
 
 //////////////////////////////////////////////////////////////////////////////////////
-//	Draws all rocks in the scene
+//	Draws all objects in scene
 //////////////////////////////////////////////////////////////////////////////////////
-void Map::DrawRocks(XMMATRIX * view, XMMATRIX * projection)
+void Map::DrawLevel(XMMATRIX * view, XMMATRIX * projection)
 {
 	//Draw each rock
 	for (auto index : m_vectorofRocks)
 	{
-		index.GetModel()->Draw(view, projection);
+		index.Draw(view, projection);
 	}
-}
 
-//////////////////////////////////////////////////////////////////////////////////////
-//	Draws all enemies in the scene
-//////////////////////////////////////////////////////////////////////////////////////
-void Map::DrawEnemies(XMMATRIX * view, XMMATRIX * projection)
-{
 	//Draw each enemy
 	for (auto index : m_vectorofEnemies)
 	{
-		index.GetModel()->Draw(view, projection);
+		index.Draw(view, projection);
 	}
+
+	m_pEndModel->Draw(view, projection);
 }
 
 //////////////////////////////////////////////////////////////////////////////////////

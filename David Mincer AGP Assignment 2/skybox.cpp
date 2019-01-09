@@ -234,6 +234,7 @@ HRESULT skybox::InitSkybox()
 	if (FAILED(hr))
 		return hr;
 
+	//Create depth stencil states
 	D3D11_DEPTH_STENCIL_DESC DSDecsc;
 	ZeroMemory(&DSDecsc, sizeof(DSDecsc));
 	DSDecsc.DepthEnable = true;
@@ -296,18 +297,18 @@ void skybox::Draw(XMMATRIX* view, XMMATRIX* projection, camera* cam)
 
 	//Set raster state
 	m_pImmediateContext->RSSetState(m_pRasterSkybox);
-	/*m_pImmediateContext->OMSetDepthStencilState(
+	m_pImmediateContext->OMSetDepthStencilState(
 		m_pDepthWriteSkybox,
-		D3D11_FLOAT32_MAX);*/
+		D3D11_FLOAT32_MAX);
 
 	//Draw
-	m_pImmediateContext->Draw(36, 0);
+	//m_pImmediateContext->Draw(36, 0);
 
 	//Reset raster state
 	m_pImmediateContext->RSSetState(m_pRasterSolid);
-	/*m_pImmediateContext->OMSetDepthStencilState(
+	m_pImmediateContext->OMSetDepthStencilState(
 		m_pDepthWriteSolid,
-		D3D11_FLOAT32_MAX);*/
+		D3D11_FLOAT32_MAX);
 }
 
 

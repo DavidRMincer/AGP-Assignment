@@ -36,27 +36,43 @@ HRESULT gameManager::InitialiseGraphics(ID3D11Device * device, ID3D11DeviceConte
 		context);
 	m_pSkybox->InitSkybox();
 
-	//Load demon
+	//Load demon model
+	m_pDemonModel = new model(device, context);
 	m_pDemonModel->AddTexture((char*)"Assets/DemonSkin_Tex.jpg");
-	m_pDemonModel->AddSampler(
-		D3D11_FILTER_MIN_MAG_MIP_LINEAR,
-		D3D11_TEXTURE_ADDRESS_WRAP,
-		D3D11_TEXTURE_ADDRESS_WRAP,
-		D3D11_TEXTURE_ADDRESS_WRAP,
-		D3D11_FLOAT32_MAX);
 	m_pDemonModel->LoadObjModel((char*)"Assets/Sphere.obj");
+	m_pDemonModel->SetDirectionalLight(
+		m_directional_light_shines_from,
+		m_directional_light_colour,
+		m_ambient_light_colour);
+
+	//Load rock model
+	m_pRockModel = new model(device, context);
+	m_pRockModel->AddTexture((char*)"Assets/Rock_Tex.jpg");
+	m_pRockModel->LoadObjModel((char*)"Assets/cube.obj");
+	m_pRockModel->SetDirectionalLight(
+		m_directional_light_shines_from,
+		m_directional_light_colour,
+		m_ambient_light_colour);
+
+	//Load end point model
+	m_pEndModel = new model(device, context);
+	m_pEndModel->AddTexture((char*)"Assets/End_Tex.jpg");
+	m_pEndModel->LoadObjModel((char*)"Assets/cube.obj");
+	m_pEndModel->IgnoreDirectionalLight();
 
 	//Load lava floor model
 	m_pLava = new model(device, context);
 	m_pLava->AddTexture((char*)"Assets/Lava_Tex.jpg");
-	m_pLava->AddSampler(
-		D3D11_FILTER_MIN_MAG_MIP_LINEAR,
-		D3D11_TEXTURE_ADDRESS_WRAP,
-		D3D11_TEXTURE_ADDRESS_WRAP,
-		D3D11_TEXTURE_ADDRESS_WRAP,
-		D3D11_FLOAT32_MAX);
 	m_pLava->LoadObjModel((char*)"Assets/cube.obj");
 	m_pLava->IgnoreDirectionalLight();
+
+	//Load scene
+	m_pMap = new Map(
+		m_tileScale,
+		m_floorY,
+		m_pRockModel,
+		m_pDemonModel,
+		m_pEndModel);
 
 	//Define vertices of a triangle - screen coordinates -1.0 to +1.0
 	POS_COL_TEX_NORM_VERTEX vertices[] =
@@ -226,6 +242,7 @@ HRESULT gameManager::InitialiseGraphics(ID3D11Device * device, ID3D11DeviceConte
 
 	context->IASetInputLayout(m_pInputLayout);
 
+	//Load camera at start point
 	m_pCamera = new camera(
 		0.0f,
 		0.0f,
@@ -234,6 +251,7 @@ HRESULT gameManager::InitialiseGraphics(ID3D11Device * device, ID3D11DeviceConte
 		0.008f,
 		0.25f,
 		0.020f);
+	m_pMap->SendtoStart(m_pCamera);
 
 	/*D3D11_SAMPLER_DESC sampler_desc;
 	ZeroMemory(&sampler_desc, sizeof(sampler_desc));
@@ -321,6 +339,9 @@ void gameManager::RenderFrame(ID3D11DeviceContext* context, ID3D11RenderTargetVi
 	////Draw vertex buffer to back buffer
 	//context->Draw(36, 0);
 
+	//Draw rocks in scene
+	m_pMap->DrawLevel(&view, &projection);
+
 	//Render floor
 	for (int z_index = -20; z_index < 20; z_index += 2)
 	{
@@ -388,7 +409,7 @@ void gameManager::UpdateLogic(HWND* hWindow)
 	if (m_pInput->IsKeyPressed(DIK_SPACE)) m_pCamera->Jump();
 
 	//Apply gravity
-	m_pCamera->UpdateVelocity(gravity, 0.0f);
+	m_pCamera->UpdateVelocity(m_gravity, 0.0f);
 }
 
 //////////////////////////////////////////////////////////////////////////////////////

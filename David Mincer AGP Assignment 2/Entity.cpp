@@ -11,25 +11,38 @@ void Entity::AddModel(model * model)
 	m_pModel = model;
 }
 
+void Entity::Draw(XMMATRIX * view, XMMATRIX * projection)
+{
+	if (m_pModel)
+	{
+		//Rotate
+		m_pModel->SetXAngle(m_xAngle);
+		m_pModel->SetYAngle(m_yAngle);
+		m_pModel->SetZAngle(m_zAngle);
+
+		//Translate
+		m_pModel->SetXPos(m_x);
+		m_pModel->SetYPos(m_y);
+		m_pModel->SetZPos(m_z);
+
+		//Draw
+		m_pModel->Draw(view, projection);
+	}
+}
+
 void Entity::SetXPos(float x)
 {
 	m_x = x;
-
-	if (m_pModel) m_pModel->SetXPos(x);
 }
 
 void Entity::SetYPos(float y)
 {
 	m_y = y;
-
-	if (m_pModel) m_pModel->SetYPos(y);
 }
 
 void Entity::SetZPos(float z)
 {
 	m_z = z;
-
-	if (m_pModel) m_pModel->SetZPos(z);
 }
 
 
@@ -56,22 +69,16 @@ model * Entity::GetModel(void)
 void Entity::MoveXPos(float x)
 {
 	m_x += x;
-
-	if (m_pModel) m_pModel->AddXPos(x);
 }
 
 void Entity::MoveYPos(float y)
 {
 	m_y += y;
-
-	if (m_pModel) m_pModel->AddYPos(y);
 }
 
 void Entity::MoveZPos(float z)
 {
 	m_z += z;
-
-	if (m_pModel) m_pModel->AddZPos(z);
 }
 
 void Entity::Pitch(float degrees)
@@ -82,8 +89,6 @@ void Entity::Pitch(float degrees)
 
 	if (XMConvertToDegrees(m_dy) > m_maxPitch) m_dy = XMConvertToRadians(m_maxPitch);
 	else if (XMConvertToDegrees(m_dy) < -m_maxPitch) m_dy = XMConvertToRadians(-m_maxPitch);
-	
-	if (m_pModel) m_pModel->SetXAngle(m_dy);
 }
 
 void Entity::Yaw(float degrees)
@@ -92,8 +97,6 @@ void Entity::Yaw(float degrees)
 
 	m_dx = sin(m_yAngle * (XM_PI / 180));
 	m_dz = cos(m_yAngle * (XM_PI / 180));
-
-	if (m_pModel) m_pModel->SetYAngle(m_yAngle);
 }
 
 Entity::~Entity()

@@ -27,6 +27,7 @@ protected:
 public:
 	Entity();
 	void AddModel(model* model);
+	void Draw(XMMATRIX* view, XMMATRIX* projection);
 
 	//////////////////////////////////////////////////////////////////////////////////////
 	//	Sets values

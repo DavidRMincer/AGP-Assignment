@@ -12,6 +12,7 @@
 #include "Input.h"
 #include "Moving_Entity.h"
 #include "skybox.h"
+#include "Map.h"
 
 
 
@@ -46,6 +47,7 @@ private:
 	ID3D11ShaderResourceView*	m_pTexture0;
 	ID3D11SamplerState*			m_pSampler0;
 
+	Map*						m_pMap;
 	camera*						m_pCamera;
 	Input*						m_pInput = new Input();
 	XMVECTOR					m_directional_light_shines_from = XMVectorSet(0.0f, -10.0f, 0.0f, 1.0f),
@@ -53,11 +55,13 @@ private:
 								m_ambient_light_colour = XMVectorSet(0.3f, 0.3f, 0.3f, 1.0f);
 	Text2D*						m_UIText = nullptr;
 	model						*m_pLava,
-								*m_pDemonModel;
+								*m_pDemonModel,
+								*m_pRockModel,
+								*m_pEndModel;
 	skybox*						m_pSkybox;
-	float						gravity = 0.00007f,
-								lightZ = 45.0f,
+	float						m_gravity = 0.00007f,
 								m_floorY = -3.0f,
+								m_tileScale = 2.0f,
 								rgba_clear_colour[4] = { 0.82f, 0.15f, 0.03f, 1.0f };
 	const int					CONSTANT_BUFFER_SIZE = 112;
 
