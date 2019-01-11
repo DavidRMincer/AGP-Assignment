@@ -30,9 +30,12 @@ private:
 public:
 	Map(int tileScale, float floor,
 		model* rockModel, model* enemyModel, model* endModel);
+	void UpdateEnemies(Entity* player);
 	void DrawLevel(XMMATRIX* view, XMMATRIX* projection);
 	void SendtoStart(Entity* entity);
 	bool AtEnd(Entity* entity);
+	float GetWidth();
+	float GetLength();
 	~Map();
 };
 

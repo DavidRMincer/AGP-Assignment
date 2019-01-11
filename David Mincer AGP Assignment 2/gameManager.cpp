@@ -44,6 +44,7 @@ HRESULT gameManager::InitialiseGraphics(ID3D11Device * device, ID3D11DeviceConte
 		m_directional_light_shines_from,
 		m_directional_light_colour,
 		m_ambient_light_colour);
+	m_pDemonModel->SetScale(0.3f);
 
 	//Load rock model
 	m_pRockModel = new model(device, context);
@@ -247,13 +248,16 @@ HRESULT gameManager::InitialiseGraphics(ID3D11Device * device, ID3D11DeviceConte
 		0.0f,
 		0.0f,
 		0.0f,
-		0.0f,
-		0.008f,
+		0.90f,
+		0.1f,
 		0.25f,
-		0.020f);
+		0.2f,
+		100,
+		10,
+		2);
 	m_pMap->SendtoStart(m_pCamera);
 
-	/*D3D11_SAMPLER_DESC sampler_desc;
+	D3D11_SAMPLER_DESC sampler_desc;
 	ZeroMemory(&sampler_desc, sizeof(sampler_desc));
 	sampler_desc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
 	sampler_desc.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
@@ -261,7 +265,7 @@ HRESULT gameManager::InitialiseGraphics(ID3D11Device * device, ID3D11DeviceConte
 	sampler_desc.AddressW = D3D11_TEXTURE_ADDRESS_WRAP;
 	sampler_desc.MaxLOD = D3D11_FLOAT32_MAX;
 
-	device->CreateSamplerState(&sampler_desc, &m_pSampler0);*/
+	device->CreateSamplerState(&sampler_desc, &m_pSampler0);
 
 	return S_OK;
 }
@@ -343,9 +347,9 @@ void gameManager::RenderFrame(ID3D11DeviceContext* context, ID3D11RenderTargetVi
 	m_pMap->DrawLevel(&view, &projection);
 
 	//Render floor
-	for (int z_index = -20; z_index < 20; z_index += 2)
+	for (int z_index = -5; z_index < m_pMap->GetLength() + 5; z_index += m_tileScale)
 	{
-		for (int x_index = -20; x_index < 20; x_index += 2)
+		for (int x_index = -5; x_index < m_pMap->GetWidth() + 5; x_index += m_tileScale)
 		{
 			//world = XMMatrixTranslation(x_index, -2, z_index);
 			//cb0_values.WorldViewProjection = world * view * projection;
@@ -379,10 +383,21 @@ void gameManager::RenderFrame(ID3D11DeviceContext* context, ID3D11RenderTargetVi
 		&projection,
 		m_pCamera);
 
-	// RENDER TEXT HERE
-
-	m_UIText->AddText("Health", -1.0f, +1.0f, 0.1f);
+	//Render health text
+	m_UIText->AddText(to_string(m_pCamera->GetHealth()), -1.0f, +1.0f, 0.1f);
 	m_UIText->RenderText();
+
+	//Render mana text
+	m_UIText->AddText(to_string(m_pCamera->GetMana()), -0.0f, +1.0f, 0.1f);
+	m_UIText->RenderText();
+
+	//Check if end of level reached
+	if (m_finished)
+	{
+		//Render victory text
+		m_UIText->AddText("Victory", -0.25f, 0.0f, 0.1f);
+		m_UIText->RenderText();
+	}
 
 	// Display what has just been rendered
 	swapChain->Present(0, 0);
@@ -408,8 +423,14 @@ void gameManager::UpdateLogic(HWND* hWindow)
 	if (m_pInput->IsKeyPressed(DIK_D)) m_pCamera->StrafeRight();
 	if (m_pInput->IsKeyPressed(DIK_SPACE)) m_pCamera->Jump();
 
+	//Update enemies
+	m_pMap->UpdateEnemies(m_pCamera);
+
 	//Apply gravity
 	m_pCamera->UpdateVelocity(m_gravity, 0.0f);
+
+	//Check if level completed
+	m_finished = m_pMap->AtEnd(m_pCamera);
 }
 
 //////////////////////////////////////////////////////////////////////////////////////

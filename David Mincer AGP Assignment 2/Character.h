@@ -5,16 +5,32 @@ class Character :
 {
 protected:
 	int			m_health,
-				m_mana;
-	const int	m_maxHealth = 100,
-				m_maxMana = 10;
+				m_mana,
+				m_maxHealth,
+				m_maxMana;
 	
-	float		m_xHand,
-				m_yHand,
+	float		m_xHand = 0.0f,
+				m_yHand = 0.0f,
 				m_zHand;
 
 public:
-	Character();
+	Character(int maxHealth, int maxMana, float handZ);
+
+	//////////////////////////////////////////////////////////////////////////////////////
+	//	Gets values
+	//////////////////////////////////////////////////////////////////////////////////////
+	int GetHealth();
+	int GetMana();
+	float GetXHand();
+	float GetYHand();
+	float GetZHand();
+
+	//////////////////////////////////////////////////////////////////////////////////////
+	//	Adds to values
+	//////////////////////////////////////////////////////////////////////////////////////
+	void AddHealth(int health);
+	void AddMana(int mana);
+
 	~Character();
 };
 

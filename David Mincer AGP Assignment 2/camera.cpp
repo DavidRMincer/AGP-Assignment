@@ -9,7 +9,8 @@ void camera::updateDifference()
 }
 
 camera::camera(float x, float y, float z, float rotation,
-	float walkSpeed, float rotationSpeed, float jumpSpeed)
+	float walkSpeed, float rotationSpeed, float jumpSpeed,
+	int maxHealth, int maxMana, float handZ) : Character(maxHealth, maxMana, handZ)
 {
 	m_x = x;
 	m_y = y;

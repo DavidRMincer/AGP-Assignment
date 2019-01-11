@@ -57,13 +57,15 @@ private:
 	model						*m_pLava,
 								*m_pDemonModel,
 								*m_pRockModel,
-								*m_pEndModel;
+								*m_pEndModel,
+								*m_pFireballModel;
 	skybox*						m_pSkybox;
-	float						m_gravity = 0.00007f,
+	float						m_gravity = 0.007f,
 								m_floorY = -3.0f,
 								m_tileScale = 2.0f,
 								rgba_clear_colour[4] = { 0.82f, 0.15f, 0.03f, 1.0f };
 	const int					CONSTANT_BUFFER_SIZE = 112;
+	bool						m_finished = false;
 
 public:
 	gameManager();

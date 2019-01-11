@@ -237,12 +237,13 @@ HRESULT skybox::InitSkybox()
 	//Create depth stencil states
 	D3D11_DEPTH_STENCIL_DESC DSDecsc;
 	ZeroMemory(&DSDecsc, sizeof(DSDecsc));
-	DSDecsc.DepthEnable = true;
-	DSDecsc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ALL;
-	DSDecsc.DepthFunc = D3D11_COMPARISON_LESS;
-	hr = m_pD3DDevice->CreateDepthStencilState(&DSDecsc, &m_pDepthWriteSolid);
+	//DSDecsc.DepthEnable = true;
 	DSDecsc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ZERO;
+	DSDecsc.DepthFunc = D3D11_COMPARISON_LESS;
 	hr = m_pD3DDevice->CreateDepthStencilState(&DSDecsc, &m_pDepthWriteSkybox);
+	DSDecsc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ALL;
+	hr = m_pD3DDevice->CreateDepthStencilState(&DSDecsc, &m_pDepthWriteSolid);
+
 
 	return S_OK;
 }

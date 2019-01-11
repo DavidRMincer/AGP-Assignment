@@ -20,8 +20,8 @@ VOut VShader(float4 position : POSITION, float4 color : COLOR,
 {
 	VOut output;
 
-	output.position = mul(WorldViewProjection, position);
 	output.texcoord = position.xyz;
+	output.position = mul(WorldViewProjection, position);
 
 	return output;
 }

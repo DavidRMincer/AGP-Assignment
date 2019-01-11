@@ -19,7 +19,8 @@ private:
 
 public:
 	camera(float x, float y, float z, float rotation,
-		float walkSpeed, float rotationSpeed, float jumpSpeed);
+		float walkSpeed, float rotationSpeed, float jumpSpeed,
+		int maxHealth, int maxMana, float handZ);
 	void Up(float distance);
 	void Jump();
 	void UpdateVelocity(float gravity, float floor);

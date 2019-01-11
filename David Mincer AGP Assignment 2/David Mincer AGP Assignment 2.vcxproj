@@ -139,6 +139,8 @@
     <ClCompile Include="camera.cpp" />
     <ClCompile Include="Character.cpp" />
     <ClCompile Include="Entity.cpp" />
+    <ClCompile Include="Fireball.cpp" />
+    <ClCompile Include="Fireball_Manager.cpp" />
     <ClCompile Include="gameManager.cpp" />
     <ClCompile Include="Input.cpp" />
     <ClCompile Include="main.cpp" />
@@ -181,6 +183,8 @@
     <ClInclude Include="camera.h" />
     <ClInclude Include="Character.h" />
     <ClInclude Include="Entity.h" />
+    <ClInclude Include="Fireball.h" />
+    <ClInclude Include="Fireball_Manager.h" />
     <ClInclude Include="gameManager.h" />
     <ClInclude Include="Input.h" />
     <ClInclude Include="Map.h" />
