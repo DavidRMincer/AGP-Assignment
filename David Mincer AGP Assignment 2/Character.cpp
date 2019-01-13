@@ -35,7 +35,15 @@ int Character::GetMana()
 //////////////////////////////////////////////////////////////////////////////////////
 float Character::GetXHand()
 {
-	return m_xHand;
+	float x;
+
+	//Rotate
+	x = m_xHand * sin(m_yAngle * (XM_PI / 180));
+	//Translate
+	x += m_x;
+
+	//Return result
+	return x;
 }
 
 //////////////////////////////////////////////////////////////////////////////////////
@@ -43,7 +51,15 @@ float Character::GetXHand()
 //////////////////////////////////////////////////////////////////////////////////////
 float Character::GetYHand()
 {
-	return m_yHand;
+	float y;
+
+	//Rotate
+	y = m_yHand * sin(m_xAngle * (XM_PI / 180));
+	//Translate
+	y += m_y;
+
+	//Return result
+	return y;
 }
 
 //////////////////////////////////////////////////////////////////////////////////////
@@ -51,7 +67,15 @@ float Character::GetYHand()
 //////////////////////////////////////////////////////////////////////////////////////
 float Character::GetZHand()
 {
-	return m_zHand;
+	float z;
+
+	//Rotate
+	z = m_zHand * cos(m_yAngle * (XM_PI / 180));
+	//Translate
+	z += m_z;
+
+	//Return result
+	return z;
 }
 
 

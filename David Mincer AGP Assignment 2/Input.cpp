@@ -101,6 +101,32 @@ bool Input::IsKeyPressed(unsigned char DI_keycode)
 }
 
 //////////////////////////////////////////////////////////////////////////////////////
+//	Returns true if left mouse button pressed
+//////////////////////////////////////////////////////////////////////////////////////
+bool Input::LeftMousePressed()
+{
+	//If left mouse already down
+	if (m_leftMouseDown)
+	{
+		//Set m_leftMouseDown to false if left mouse up
+		if (m_mouse_state.rgbButtons[0] == 0)
+			m_leftMouseDown = false;
+
+		return false;
+	}
+	//If left mouse not already down
+	else if (m_mouse_state.rgbButtons[0] != 0)
+	{
+		//Set m_leftMouseDown to true
+		m_leftMouseDown = true;
+		return true;
+	}
+
+	//If nothing happens with left mouse button
+	return false;
+}
+
+//////////////////////////////////////////////////////////////////////////////////////
 // Returns horizontal mouse movement
 //////////////////////////////////////////////////////////////////////////////////////
 float Input::GetHorizontalMouseInput(void)

@@ -47,7 +47,7 @@ void Map::AddEnd(model * endModel, float y)
 //////////////////////////////////////////////////////////////////////////////////////
 //	Loads map
 //////////////////////////////////////////////////////////////////////////////////////
-Map::Map(int tileScale, float floor, model* rockModel, model* enemyModel, model* endModel)
+Map::Map(int tileScale, float floor, model* rockModel, model* enemyModel, model* endModel, model* lavaModel)
 {
 	//Create map layout
 	m_map = {	"RRRRR-----------------------------------",
@@ -82,6 +82,10 @@ Map::Map(int tileScale, float floor, model* rockModel, model* enemyModel, model*
 	m_tileScale = tileScale;
 	m_width = m_map[0].length();
 	m_length = m_map.size();
+
+	//Set lava model
+	m_pLavaModel = lavaModel;
+	m_pLavaModel->SetYPos(floor);
 
 	//Set points
 	for (int x = 0; x < m_width; ++x)
@@ -173,6 +177,19 @@ void Map::DrawLevel(XMMATRIX * view, XMMATRIX * projection)
 	}
 
 	m_pEndModel->Draw(view, projection);
+
+	//Render floor
+	for (int z_index = -5; z_index < GetLength() + 5; z_index += m_tileScale)
+	{
+		for (int x_index = -5; x_index < GetWidth() + 5; x_index += m_tileScale)
+		{
+			//Draw lava block
+			m_pLavaModel->SetXPos(x_index);
+			m_pLavaModel->SetZPos(z_index);
+
+			m_pLavaModel->Draw(view, projection);
+		}
+	}
 }
 
 //////////////////////////////////////////////////////////////////////////////////////

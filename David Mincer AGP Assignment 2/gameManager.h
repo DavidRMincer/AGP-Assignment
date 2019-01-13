@@ -13,6 +13,7 @@
 #include "Moving_Entity.h"
 #include "skybox.h"
 #include "Map.h"
+#include "Fireball_Manager.h"
 
 
 
@@ -60,15 +61,16 @@ private:
 								*m_pEndModel,
 								*m_pFireballModel;
 	skybox*						m_pSkybox;
+	Fireball_Manager*			m_pFireballManager;
+
 	float						m_gravity = 0.007f,
 								m_floorY = -3.0f,
 								m_tileScale = 2.0f,
-								rgba_clear_colour[4] = { 0.82f, 0.15f, 0.03f, 1.0f };
-	const int					CONSTANT_BUFFER_SIZE = 112;
+								m_rgba_clear_colour[4] = { 0.82f, 0.15f, 0.03f, 1.0f };
+	const int					m_CONSTANT_BUFFER_SIZE = 112;
 	bool						m_finished = false;
 
 public:
-	gameManager();
 	gameManager(HINSTANCE* hInstance, HWND* hWindow,
 		ID3D11Device* device, ID3D11DeviceContext* context);
 	HRESULT InitialiseGraphics(ID3D11Device* device, ID3D11DeviceContext* context);

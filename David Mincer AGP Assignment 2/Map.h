@@ -12,7 +12,8 @@ private:
 	vector<Entity>		m_vectorofRocks;
 	vector<Character>	m_vectorofEnemies;
 
-	model*				m_pEndModel;
+	model				*m_pEndModel,
+						*m_pLavaModel;
 
 	int					m_tileScale,
 						m_width,
@@ -29,7 +30,8 @@ private:
 
 public:
 	Map(int tileScale, float floor,
-		model* rockModel, model* enemyModel, model* endModel);
+		model* rockModel, model* enemyModel, model* endModel,
+		model* lavaModel);
 	void UpdateEnemies(Entity* player);
 	void DrawLevel(XMMATRIX* view, XMMATRIX* projection);
 	void SendtoStart(Entity* entity);

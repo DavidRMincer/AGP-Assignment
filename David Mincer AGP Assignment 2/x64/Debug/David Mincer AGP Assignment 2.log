@@ -28,13 +28,6 @@ c:\program files (x86)\microsoft directx sdk (june 2010)\include\xnamath.h(2742)
 c:\program files (x86)\microsoft directx sdk (june 2010)\include\xnamath.h(2743): warning C4838: conversion from 'unsigned int' to 'INT' requires a narrowing conversion
 c:\program files (x86)\microsoft directx sdk (june 2010)\include\xnamath.h(2754): warning C4838: conversion from 'unsigned int' to 'INT' requires a narrowing conversion
   c:\program files (x86)\windows kits\10\include\10.0.16299.0\um\dinput.h: DIRECTINPUT_VERSION undefined. Defaulting to version 0x0800
-c:\users\dave-id\documents\github\agp-assignment\david mincer agp assignment 2\gamemanager.cpp(76): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
-c:\users\dave-id\documents\github\agp-assignment\david mincer agp assignment 2\gamemanager.cpp(288): warning C4305: 'argument': truncation from 'double' to 'FLOAT'
-c:\users\dave-id\documents\github\agp-assignment\david mincer agp assignment 2\gamemanager.cpp(350): warning C4244: '+=': conversion from 'float' to 'int', possible loss of data
-c:\users\dave-id\documents\github\agp-assignment\david mincer agp assignment 2\gamemanager.cpp(352): warning C4244: '+=': conversion from 'float' to 'int', possible loss of data
-c:\users\dave-id\documents\github\agp-assignment\david mincer agp assignment 2\gamemanager.cpp(372): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-c:\users\dave-id\documents\github\agp-assignment\david mincer agp assignment 2\gamemanager.cpp(374): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-  Generating Code...
-  Skipping... (no relevant changes detected)
-  main.cpp
+c:\users\dave-id\documents\github\agp-assignment\david mincer agp assignment 2\gamemanager.cpp(86): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+c:\users\dave-id\documents\github\agp-assignment\david mincer agp assignment 2\gamemanager.cpp(298): warning C4305: 'argument': truncation from 'double' to 'FLOAT'
   David Mincer AGP Assignment 2.vcxproj -> C:\Users\Dave-id\Documents\GitHub\AGP-Assignment\David Mincer AGP Assignment 2\x64\Debug\David Mincer AGP Assignment 2.exe

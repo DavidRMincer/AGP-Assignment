@@ -16,10 +16,12 @@ private:
 	Character	*m_pOwner;
 
 public:
-	Fireball(int maxDuration, int damage, float speed);
+	Fireball(int maxDuration, int damage, float speed,
+		model* fireballModel);
 	bool IsActive();
 	void SetActive(bool active);
 	int GetDamage();
+	bool IsAlive();
 	void Update();
 	void Fire(Character* character);
 	~Fireball();

@@ -303,7 +303,7 @@ void skybox::Draw(XMMATRIX* view, XMMATRIX* projection, camera* cam)
 		D3D11_FLOAT32_MAX);
 
 	//Draw
-	//m_pImmediateContext->Draw(36, 0);
+	m_pImmediateContext->Draw(36, 0);
 
 	//Reset raster state
 	m_pImmediateContext->RSSetState(m_pRasterSolid);

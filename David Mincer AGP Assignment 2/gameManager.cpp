@@ -2,15 +2,18 @@
 
 
 
-gameManager::gameManager()
-{
-}
-
 gameManager::gameManager(HINSTANCE * hInstance, HWND * hWindow, ID3D11Device * device, ID3D11DeviceContext * context)
 {
 	InitialiseGraphics(device, context);
 	m_pInput->InitInput(*hInstance, *hWindow);
 	m_UIText = new Text2D("Assets/font1.bmp", device, context);
+
+	m_pFireballManager = new Fireball_Manager(
+		20,
+		100,
+		10,
+		0.75,
+		m_pFireballModel);
 }
 
 //////////////////////////////////////////////////////////////////////////////////////
@@ -61,6 +64,12 @@ HRESULT gameManager::InitialiseGraphics(ID3D11Device * device, ID3D11DeviceConte
 	m_pEndModel->LoadObjModel((char*)"Assets/cube.obj");
 	m_pEndModel->IgnoreDirectionalLight();
 
+	m_pFireballModel = new model(device, context);
+	m_pFireballModel->AddTexture((char*)"Assets/Rock_Tex.jpg");
+	m_pFireballModel->LoadObjModel((char*)"Assets/Sphere.obj");
+	m_pFireballModel->IgnoreDirectionalLight();
+	m_pFireballModel->SetScale(0.2f);
+
 	//Load lava floor model
 	m_pLava = new model(device, context);
 	m_pLava->AddTexture((char*)"Assets/Lava_Tex.jpg");
@@ -73,7 +82,8 @@ HRESULT gameManager::InitialiseGraphics(ID3D11Device * device, ID3D11DeviceConte
 		m_floorY,
 		m_pRockModel,
 		m_pDemonModel,
-		m_pEndModel);
+		m_pEndModel,
+		m_pLava);
 
 	//Define vertices of a triangle - screen coordinates -1.0 to +1.0
 	POS_COL_TEX_NORM_VERTEX vertices[] =
@@ -145,7 +155,7 @@ HRESULT gameManager::InitialiseGraphics(ID3D11Device * device, ID3D11DeviceConte
 	ZeroMemory(&constant_buffer_desc, sizeof(constant_buffer_desc));
 
 	constant_buffer_desc.Usage = D3D11_USAGE_DEFAULT;
-	constant_buffer_desc.ByteWidth = CONSTANT_BUFFER_SIZE;	// Must be a multiple of 16
+	constant_buffer_desc.ByteWidth = m_CONSTANT_BUFFER_SIZE;	// Must be a multiple of 16
 	constant_buffer_desc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
 
 	hr = device->CreateBuffer(&constant_buffer_desc, NULL, &m_pConstantBuffer0);
@@ -288,7 +298,7 @@ void gameManager::RenderFrame(ID3D11DeviceContext* context, ID3D11RenderTargetVi
 		100.0);
 
 	// Clear the back buffer
-	context->ClearRenderTargetView(backBuffer, rgba_clear_colour);
+	context->ClearRenderTargetView(backBuffer, m_rgba_clear_colour);
 
 	context->ClearDepthStencilView(zBuffer, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
 
@@ -343,45 +353,17 @@ void gameManager::RenderFrame(ID3D11DeviceContext* context, ID3D11RenderTargetVi
 	////Draw vertex buffer to back buffer
 	//context->Draw(36, 0);
 
+	//Render skybox
+	/*m_pSkybox->Draw(
+		&view,
+		&projection,
+		m_pCamera);*/
+
 	//Draw rocks in scene
 	m_pMap->DrawLevel(&view, &projection);
 
-	//Render floor
-	for (int z_index = -5; z_index < m_pMap->GetLength() + 5; z_index += m_tileScale)
-	{
-		for (int x_index = -5; x_index < m_pMap->GetWidth() + 5; x_index += m_tileScale)
-		{
-			//world = XMMatrixTranslation(x_index, -2, z_index);
-			//cb0_values.WorldViewProjection = world * view * projection;
-			//transpose = XMMatrixTranspose(world);	// model world matrix
-
-			//cb0_values.directional_light_colour = m_directional_light_colour;
-			//cb0_values.ambient_light_colour = m_ambient_light_colour;
-			//cb0_values.directional_light_vector = XMVector3Transform(m_directional_light_shines_from, transpose);
-			//cb0_values.directional_light_vector = XMVector3Normalize(cb0_values.directional_light_vector);
-
-			//context->UpdateSubresource(m_pConstantBuffer0, 0, 0, &cb0_values, 0, 0);
-			//context->VSSetConstantBuffers(0, 1, &m_pConstantBuffer0);
-
-			//context->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-
-			//context->PSSetSamplers(0, 1, &m_pSampler0);
-			//context->PSSetShaderResources(0, 1, &m_pTexture0);
-
-			//context->Draw(36, 0);
-			m_pLava->SetXPos(x_index);
-			m_pLava->SetYPos(m_floorY);
-			m_pLava->SetZPos(z_index);
-
-			m_pLava->Draw(&view, &projection);
-		}
-	}
-
-	//Render skybox
-	m_pSkybox->Draw(
-		&view,
-		&projection,
-		m_pCamera);
+	//Render fireballs
+	m_pFireballManager->Draw(&view, &projection);
 
 	//Render health text
 	m_UIText->AddText(to_string(m_pCamera->GetHealth()), -1.0f, +1.0f, 0.1f);
@@ -416,12 +398,23 @@ void gameManager::UpdateLogic(HWND* hWindow)
 	m_pCamera->Pitch(m_pInput->GetVerticalMouseInput());
 
 	//Get keyboard inputs
-	if (m_pInput->IsKeyPressed(DIK_ESCAPE)) DestroyWindow(*hWindow);
-	if (m_pInput->IsKeyPressed(DIK_W)) m_pCamera->Forward();
-	if (m_pInput->IsKeyPressed(DIK_S)) m_pCamera->Backward();
-	if (m_pInput->IsKeyPressed(DIK_A)) m_pCamera->StrafeLeft();
-	if (m_pInput->IsKeyPressed(DIK_D)) m_pCamera->StrafeRight();
-	if (m_pInput->IsKeyPressed(DIK_SPACE)) m_pCamera->Jump();
+	if (m_pInput->IsKeyPressed(DIK_ESCAPE))
+		DestroyWindow(*hWindow);
+	if (m_pInput->IsKeyPressed(DIK_W))
+		m_pCamera->Forward();
+	if (m_pInput->IsKeyPressed(DIK_S))
+		m_pCamera->Backward();
+	if (m_pInput->IsKeyPressed(DIK_A))
+		m_pCamera->StrafeLeft();
+	if (m_pInput->IsKeyPressed(DIK_D))
+		m_pCamera->StrafeRight();
+	if (m_pInput->IsKeyPressed(DIK_SPACE))
+		m_pCamera->Jump();
+	if (m_pInput->LeftMousePressed())
+		m_pFireballManager->Fire(m_pCamera);
+
+	//Update fireballs
+	m_pFireballManager->Update();
 
 	//Update enemies
 	m_pMap->UpdateEnemies(m_pCamera);

@@ -10,11 +10,14 @@ private:
 	DIMOUSESTATE				m_mouse_state;
 	unsigned char				m_keyboard_keys_state[256];
 
+	bool						m_leftMouseDown = false;
+
 public:
 	Input();
 	HRESULT InitInput(HINSTANCE hinstance, HWND hwnd);
 	void ReadInputStates(void);
 	bool IsKeyPressed(unsigned char DI_keycode);
+	bool LeftMousePressed();
 	float GetHorizontalMouseInput(void);
 	float GetVerticalMouseInput(void);
 	~Input();

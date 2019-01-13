@@ -2,11 +2,12 @@
 
 
 
-Fireball::Fireball(int maxDuration, int damage, float speed)
+Fireball::Fireball(int maxDuration, int damage, float speed, model* fireballModel)
 {
 	m_maxDuration = maxDuration;
 	m_damage = damage;
 	m_speed = speed;
+	m_pModel = fireballModel;
 }
 
 //////////////////////////////////////////////////////////////////////////////////////
@@ -34,25 +35,25 @@ int Fireball::GetDamage()
 }
 
 //////////////////////////////////////////////////////////////////////////////////////
+//	Returns true if duration is over 0
+//////////////////////////////////////////////////////////////////////////////////////
+bool Fireball::IsAlive()
+{
+	return (m_duration > 0);
+}
+
+//////////////////////////////////////////////////////////////////////////////////////
 //	Updates position & duration
 //////////////////////////////////////////////////////////////////////////////////////
 void Fireball::Update()
 {
-	//Deactive expired fireball
-	if (m_duration == 0)
-		m_active = false;
+	//Move in direction at speed
+	m_x += (m_xDirection * m_speed);
+	m_y += (m_yDirection * m_speed);
+	m_z += (m_zDirection * m_speed);
 
-	//Update fireball
-	else
-	{
-		//Move in direction at speed
-		m_x += (m_xDirection * m_speed);
-		m_y += (m_yDirection * m_speed);
-		m_z += (m_zDirection * m_speed);
-
-		//Subtract 1 from duration
-		--m_duration;
-	}
+	//Subtract 1 from duration
+	--m_duration;
 }
 
 //////////////////////////////////////////////////////////////////////////////////////
