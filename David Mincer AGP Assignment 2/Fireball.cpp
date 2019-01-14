@@ -61,6 +61,8 @@ void Fireball::Update()
 //////////////////////////////////////////////////////////////////////////////////////
 void Fireball::Fire(Character * character)
 {
+	float magnitude;
+
 	//Set owner
 	m_pOwner = character;
 
@@ -73,6 +75,14 @@ void Fireball::Fire(Character * character)
 	m_xDirection = m_x - m_pOwner->GetXPos();
 	m_yDirection = m_y - m_pOwner->GetYPos();
 	m_zDirection = m_z - m_pOwner->GetZPos();
+
+	//Calculate magnitude
+	magnitude = sqrt((m_x * m_x) + (m_y * m_y) + (m_z * m_z));
+
+	//Normalise direction
+	m_xDirection /= magnitude;
+	m_yDirection /= magnitude;
+	m_zDirection /= magnitude;
 
 	//Reset duration
 	m_duration = m_maxDuration;

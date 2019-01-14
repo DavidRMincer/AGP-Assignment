@@ -38,23 +38,23 @@ float Character::GetXHand()
 	float x;
 
 	//Rotate
-	x = m_xHand * sin(m_yAngle * (XM_PI / 180));
+	x = sin(m_yAngle * (XM_PI / 180));
 	//Translate
-	x += m_x;
+	x += m_xHand + m_x;
 
 	//Return result
 	return x;
 }
 
 //////////////////////////////////////////////////////////////////////////////////////
-//	Returns hand x position
+//	Returns hand y position
 //////////////////////////////////////////////////////////////////////////////////////
 float Character::GetYHand()
 {
 	float y;
 
 	//Rotate
-	y = m_yHand * sin(m_xAngle * (XM_PI / 180));
+	y = sin(m_xAngle * (XM_PI / 180));
 	//Translate
 	y += m_y;
 
@@ -63,7 +63,7 @@ float Character::GetYHand()
 }
 
 //////////////////////////////////////////////////////////////////////////////////////
-//	Returns hand x position
+//	Returns hand z position
 //////////////////////////////////////////////////////////////////////////////////////
 float Character::GetZHand()
 {
@@ -71,6 +71,7 @@ float Character::GetZHand()
 
 	//Rotate
 	z = m_zHand * cos(m_yAngle * (XM_PI / 180));
+	z *= cos(m_xAngle * (XM_PI / 180));
 	//Translate
 	z += m_z;
 

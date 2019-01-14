@@ -4,8 +4,8 @@
 
 void camera::updateDifference()
 {
-	m_dx = sin(m_rotation * (XM_PI / 180));
-	m_dz = cos(m_rotation * (XM_PI / 180));
+	m_dx = sin(m_yAngle * (XM_PI / 180));
+	m_dz = cos(m_yAngle * (XM_PI / 180));
 }
 
 camera::camera(float x, float y, float z, float rotation,

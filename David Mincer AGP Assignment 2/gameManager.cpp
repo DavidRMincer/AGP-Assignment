@@ -10,9 +10,9 @@ gameManager::gameManager(HINSTANCE * hInstance, HWND * hWindow, ID3D11Device * d
 
 	m_pFireballManager = new Fireball_Manager(
 		20,
-		100,
+		150,
 		10,
-		0.75,
+		8,
 		m_pFireballModel);
 }
 
