@@ -22,12 +22,12 @@ void Map::AddRock(model * rockModel, float x, float y, float z)
 //////////////////////////////////////////////////////////////////////////////////////
 void Map::AddEnemy(model * enemyModel, float x, float y, float z)
 {
-	Character enemy(10, 10, 1);
+	Enemy* enemy = new Enemy(10, 150, 1, 8);
 
-	enemy.AddModel(enemyModel);
-	enemy.SetXPos(x);
-	enemy.SetYPos(y);
-	enemy.SetZPos(z);
+	enemy->AddModel(enemyModel);
+	enemy->SetXPos(x);
+	enemy->SetYPos(y);
+	enemy->SetZPos(z);
 
 	m_vectorofEnemies.push_back(enemy);
 }
@@ -155,7 +155,8 @@ void Map::UpdateEnemies(Entity * player)
 	//Update each enemy
 	for (auto index : m_vectorofEnemies)
 	{
-		index.LookAt(player);
+		index->LookAt(player);
+		index->RechargeMana();
 	}
 }
 
@@ -173,7 +174,7 @@ void Map::DrawLevel(XMMATRIX * view, XMMATRIX * projection)
 	//Draw each enemy
 	for (auto index : m_vectorofEnemies)
 	{
-		index.Draw(view, projection);
+		index->Draw(view, projection);
 	}
 
 	m_pEndModel->Draw(view, projection);
@@ -234,6 +235,15 @@ float Map::GetWidth()
 float Map::GetLength()
 {
 	return m_length * m_tileScale;
+}
+
+//////////////////////////////////////////////////////////////////////////////////////
+//	Returns vector of enemies for use outside
+//	... map capabilities
+//////////////////////////////////////////////////////////////////////////////////////
+vector<Enemy*> Map::GetVectorofEnemies()
+{
+	return m_vectorofEnemies;
 }
 
 

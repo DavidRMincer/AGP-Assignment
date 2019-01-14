@@ -1,7 +1,7 @@
 #pragma once
 #include <vector>
 #include <string>
-#include "Character.h"
+#include "Enemy.h"
 
 using namespace std;
 
@@ -10,7 +10,7 @@ class Map
 private:
 	vector<string>		m_map;
 	vector<Entity>		m_vectorofRocks;
-	vector<Character>	m_vectorofEnemies;
+	vector<Enemy*>		m_vectorofEnemies;
 
 	model				*m_pEndModel,
 						*m_pLavaModel;
@@ -38,6 +38,7 @@ public:
 	bool AtEnd(Entity* entity);
 	float GetWidth();
 	float GetLength();
+	vector<Enemy*> GetVectorofEnemies();
 	~Map();
 };
 

@@ -15,6 +15,7 @@ protected:
 
 public:
 	Character(int maxHealth, int maxMana, float handZ);
+	bool ReadytoFire();
 
 	//////////////////////////////////////////////////////////////////////////////////////
 	//	Gets values
@@ -30,6 +31,7 @@ public:
 	//////////////////////////////////////////////////////////////////////////////////////
 	void AddHealth(int health);
 	void AddMana(int mana);
+	void RechargeMana();
 
 	~Character();
 };

@@ -263,7 +263,7 @@ HRESULT gameManager::InitialiseGraphics(ID3D11Device * device, ID3D11DeviceConte
 		0.25f,
 		0.2f,
 		100,
-		10,
+		100,
 		2);
 	m_pMap->SendtoStart(m_pCamera);
 
@@ -390,6 +390,9 @@ void gameManager::RenderFrame(ID3D11DeviceContext* context, ID3D11RenderTargetVi
 //////////////////////////////////////////////////////////////////////////////////////
 void gameManager::UpdateLogic(HWND* hWindow)
 {
+	//Recharge mana
+	m_pCamera->RechargeMana();
+
 	//Read input states
 	m_pInput->ReadInputStates();
 
@@ -410,14 +413,33 @@ void gameManager::UpdateLogic(HWND* hWindow)
 		m_pCamera->StrafeRight();
 	if (m_pInput->IsKeyPressed(DIK_SPACE))
 		m_pCamera->Jump();
-	if (m_pInput->LeftMousePressed())
+	if (m_pInput->LeftMousePressed() &&
+		m_pCamera->ReadytoFire())
+	{
+		//Fire fireball from camera
 		m_pFireballManager->Fire(m_pCamera);
+
+		//Deplete mana
+		m_pCamera->AddMana(-m_pCamera->GetMana());
+	}
 
 	//Update fireballs
 	m_pFireballManager->Update();
 
 	//Update enemies
 	m_pMap->UpdateEnemies(m_pCamera);
+	//Fire enemy fireballs
+	for (auto i : m_pMap->GetVectorofEnemies())
+	{
+		if (i->TargetInRange(m_pCamera) &&
+			i->ReadytoFire())
+		{
+			m_pFireballManager->Fire(i);
+
+			//Reset mana
+			i->AddMana(-i->GetMana());
+		}
+	}
 
 	//Apply gravity
 	m_pCamera->UpdateVelocity(m_gravity, 0.0f);
