@@ -118,6 +118,19 @@ void Fireball_Manager::Draw(XMMATRIX * view, XMMATRIX * projection)
 	}
 }
 
+//////////////////////////////////////////////////////////////////////////////////////
+//	Check collisions with characters
+//////////////////////////////////////////////////////////////////////////////////////
+void Fireball_Manager::CharacterCollisionCheck(Character * character)
+{
+	for (auto i : m_vectorofFireballs)
+	{
+		//Only check if active
+		if (i->IsActive())
+			i->CharacterCollisionCheck(character);
+	}
+}
+
 
 Fireball_Manager::~Fireball_Manager()
 {

@@ -91,6 +91,41 @@ void Fireball::Fire(Character * character)
 	m_active = true;
 }
 
+//////////////////////////////////////////////////////////////////////////////////////
+//	Check collision with character
+//////////////////////////////////////////////////////////////////////////////////////
+void Fireball::CharacterCollisionCheck(Character * character)
+{
+	//Ignore if character is the owner
+	if (character != m_pOwner)
+	{
+		float xDist,
+			yDist,
+			zDist,
+			distance,
+			radius;
+
+		//Calaculate distance between entities
+		xDist = m_x - character->GetXPos();
+		yDist = m_y - character->GetYPos();
+		zDist = m_z - character->GetZPos();
+		distance = sqrt((xDist * xDist) + (yDist * yDist) + (zDist * zDist));
+
+		//Calculate sum of both radii
+		radius = m_radius + character->GetRadius();
+
+		//If colliding
+		if (distance <= radius)
+		{
+			//Deal damage to character
+			character->AddHealth(-m_damage);
+
+			//Destroy fireball
+			m_duration = 0;
+		}
+	}
+}
+
 
 Fireball::~Fireball()
 {

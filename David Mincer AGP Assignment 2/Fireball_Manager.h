@@ -16,6 +16,7 @@ public:
 	void OrganiseVector();
 	void Fire(Character* owner);
 	void Draw(XMMATRIX* view, XMMATRIX* projection);
+	void CharacterCollisionCheck(Character* character);
 	~Fireball_Manager();
 };
 

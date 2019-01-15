@@ -16,6 +16,7 @@ protected:
 public:
 	Character(int maxHealth, int maxMana, float handZ);
 	bool ReadytoFire();
+	bool IsAlive();
 
 	//////////////////////////////////////////////////////////////////////////////////////
 	//	Gets values

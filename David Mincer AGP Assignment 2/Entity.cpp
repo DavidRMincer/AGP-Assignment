@@ -61,6 +61,11 @@ float Entity::GetZPos(void)
 	return m_z;
 }
 
+float Entity::GetRadius(void)
+{
+	return m_radius;
+}
+
 model * Entity::GetModel(void)
 {
 	return m_pModel;

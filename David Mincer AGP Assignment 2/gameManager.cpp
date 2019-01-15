@@ -431,7 +431,8 @@ void gameManager::UpdateLogic(HWND* hWindow)
 	//Fire enemy fireballs
 	for (auto i : m_pMap->GetVectorofEnemies())
 	{
-		if (i->TargetInRange(m_pCamera) &&
+		if (i->IsAlive() &&
+			i->TargetInRange(m_pCamera) &&
 			i->ReadytoFire())
 		{
 			m_pFireballManager->Fire(i);
@@ -444,8 +445,24 @@ void gameManager::UpdateLogic(HWND* hWindow)
 	//Apply gravity
 	m_pCamera->UpdateVelocity(m_gravity, 0.0f);
 
+	//Check collisions
+	for (auto i : m_pMap->GetVectorofEnemies())
+	{
+		if (i->IsAlive())
+			m_pFireballManager->CharacterCollisionCheck(i);
+	}
+	m_pFireballManager->CharacterCollisionCheck(m_pCamera);
+
+	//Respawn player if dead
+	if (!m_pCamera->IsAlive())
+	{
+		m_pCamera->ResetHealth();
+		m_pMap->SendtoStart(m_pCamera);
+	}
+
 	//Check if level completed
-	m_finished = m_pMap->AtEnd(m_pCamera);
+	if (!m_finished)
+		m_finished = m_pMap->AtEnd(m_pCamera);
 }
 
 //////////////////////////////////////////////////////////////////////////////////////

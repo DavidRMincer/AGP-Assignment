@@ -24,6 +24,7 @@ public:
 	void Up(float distance);
 	void Jump();
 	void UpdateVelocity(float gravity, float floor);
+	void ResetHealth();
 	XMMATRIX GetViewMatrix();
 	~camera();
 };

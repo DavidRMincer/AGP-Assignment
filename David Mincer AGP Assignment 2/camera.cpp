@@ -54,6 +54,11 @@ void camera::UpdateVelocity(float gravity, float floor)
 	m_y += m_jumpVelocity;
 }
 
+void camera::ResetHealth()
+{
+	m_health = m_maxHealth;
+}
+
 XMMATRIX camera::GetViewMatrix()
 {
 	m_position = XMVectorSet(m_x, m_y, m_z, 0.0f);

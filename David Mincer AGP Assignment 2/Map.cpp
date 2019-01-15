@@ -155,8 +155,12 @@ void Map::UpdateEnemies(Entity * player)
 	//Update each enemy
 	for (auto index : m_vectorofEnemies)
 	{
-		index->LookAt(player);
-		index->RechargeMana();
+		//Ignore if dead
+		if (index->IsAlive())
+		{
+			index->LookAt(player);
+			index->RechargeMana();
+		}
 	}
 }
 
@@ -174,7 +178,9 @@ void Map::DrawLevel(XMMATRIX * view, XMMATRIX * projection)
 	//Draw each enemy
 	for (auto index : m_vectorofEnemies)
 	{
-		index->Draw(view, projection);
+		//Draws if alive
+		if (index->IsAlive())
+			index->Draw(view, projection);
 	}
 
 	m_pEndModel->Draw(view, projection);

@@ -24,6 +24,7 @@ public:
 	bool IsAlive();
 	void Update();
 	void Fire(Character* character);
+	void CharacterCollisionCheck(Character* character);
 	~Fireball();
 };
 

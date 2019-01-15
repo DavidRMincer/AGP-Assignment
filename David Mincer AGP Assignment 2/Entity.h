@@ -18,7 +18,8 @@ protected:
 				m_dx = 0.0f,
 				m_dy = 0.0f,
 				m_dz = 0.0f,
-				m_maxPitch = 75.0f;
+				m_maxPitch = 75.0f,
+				m_radius = 1.0f;
 	XMVECTOR	m_position,
 				m_lookat,
 				m_up = XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
@@ -42,6 +43,7 @@ public:
 	float GetXPos(void);
 	float GetYPos(void);
 	float GetZPos(void);
+	float GetRadius(void);
 	model* GetModel(void);
 
 	//////////////////////////////////////////////////////////////////////////////////////
