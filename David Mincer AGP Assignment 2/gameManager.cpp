@@ -353,17 +353,17 @@ void gameManager::RenderFrame(ID3D11DeviceContext* context, ID3D11RenderTargetVi
 	////Draw vertex buffer to back buffer
 	//context->Draw(36, 0);
 
-	//Render skybox
-	/*m_pSkybox->Draw(
-		&view,
-		&projection,
-		m_pCamera);*/
-
 	//Draw rocks in scene
 	m_pMap->DrawLevel(&view, &projection);
 
 	//Render fireballs
 	m_pFireballManager->Draw(&view, &projection);
+
+	//Render skybox
+	m_pSkybox->Draw(
+		&view,
+		&projection,
+		m_pCamera);
 
 	//Render health text
 	m_UIText->AddText(to_string(m_pCamera->GetHealth()), -1.0f, +1.0f, 0.1f);
@@ -443,7 +443,10 @@ void gameManager::UpdateLogic(HWND* hWindow)
 	}
 
 	//Apply gravity
-	m_pCamera->UpdateVelocity(m_gravity, 0.0f);
+	if (m_pMap->CharacterToRockCollision(m_pCamera))
+		m_pCamera->UpdateVelocity(m_gravity, m_floorY);
+	else
+		m_pCamera->UpdateVelocity(m_gravity, m_floorY + (m_tileScale * 2));
 
 	//Check collisions
 	for (auto i : m_pMap->GetVectorofEnemies())

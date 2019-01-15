@@ -38,6 +38,7 @@ public:
 	bool AtEnd(Entity* entity);
 	float GetWidth();
 	float GetLength();
+	bool CharacterToRockCollision(Character* character);
 	vector<Enemy*> GetVectorofEnemies();
 	~Map();
 };

@@ -45,6 +45,11 @@ void Entity::SetZPos(float z)
 	m_z = z;
 }
 
+void Entity::SetRadius(float radius)
+{
+	m_radius = radius;
+}
+
 
 float Entity::GetXPos(void)
 {

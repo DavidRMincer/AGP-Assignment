@@ -13,7 +13,7 @@ private:
 	bool m_jumping;
 	float m_jumpVelocity,
 		m_jumpSpeed,
-		m_maxPitch = 75.0f;
+		m_maxPitch = 80.0f;
 
 	void updateDifference();
 

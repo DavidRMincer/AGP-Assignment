@@ -13,6 +13,7 @@ void Map::AddRock(model * rockModel, float x, float y, float z)
 	rock.SetXPos(x);
 	rock.SetYPos(y);
 	rock.SetZPos(z);
+	rock.SetRadius(m_tileScale / 2);
 
 	m_vectorofRocks.push_back(rock);
 }
@@ -241,6 +242,39 @@ float Map::GetWidth()
 float Map::GetLength()
 {
 	return m_length * m_tileScale;
+}
+
+//////////////////////////////////////////////////////////////////////////////////////
+//	Checks character to rock collisions
+//////////////////////////////////////////////////////////////////////////////////////
+bool Map::CharacterToRockCollision(Character * character)
+{
+	for (auto i : m_vectorofRocks)
+	{
+		float rockFront,
+			rockRear,
+			rockLeft,
+			rockRight,
+			rockTop;
+
+		//Calculate rock sides
+		rockFront = i.GetZPos() - i.GetRadius();
+		rockRear = i.GetZPos() + i.GetRadius();
+		rockLeft = i.GetXPos() - i.GetRadius();
+		rockRight = i.GetXPos() + i.GetRadius();
+		rockTop = i.GetXPos() + i.GetRadius();
+
+		//Check collision
+		if (character->GetZPos() <= rockRear &&
+			character->GetZPos() >= rockFront &&
+			character->GetXPos() <= rockRight &&
+			character->GetXPos() >= rockLeft &&
+			character->GetXPos() <= rockTop)
+			return true;
+	}
+
+	//No collision
+	return false;
 }
 
 //////////////////////////////////////////////////////////////////////////////////////
