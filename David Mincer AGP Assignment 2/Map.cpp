@@ -249,6 +249,18 @@ float Map::GetLength()
 //////////////////////////////////////////////////////////////////////////////////////
 bool Map::CharacterToRockCollision(Character * character)
 {
+	float charFront,
+		charRear,
+		charLeft,
+		charRight,
+		charBot;
+
+	charFront = character->GetZPos() - character->GetRadius();
+	charRear = character->GetZPos() + character->GetRadius();
+	charLeft = character->GetXPos() - character->GetRadius();
+	charRight = character->GetXPos() + character->GetRadius();
+	charBot = character->GetYPos() - character->GetRadius();
+
 	for (auto i : m_vectorofRocks)
 	{
 		float rockFront,
@@ -265,11 +277,11 @@ bool Map::CharacterToRockCollision(Character * character)
 		rockTop = i.GetXPos() + i.GetRadius();
 
 		//Check collision
-		if (character->GetZPos() <= rockRear &&
-			character->GetZPos() >= rockFront &&
-			character->GetXPos() <= rockRight &&
-			character->GetXPos() >= rockLeft &&
-			character->GetXPos() <= rockTop)
+		if (charFront <= rockRear &&
+			charRear >= rockFront &&
+			charLeft <= rockRight &&
+			charRight >= rockLeft &&
+			charBot <= rockTop)
 			return true;
 	}
 

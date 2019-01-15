@@ -444,9 +444,13 @@ void gameManager::UpdateLogic(HWND* hWindow)
 
 	//Apply gravity
 	if (m_pMap->CharacterToRockCollision(m_pCamera))
-		m_pCamera->UpdateVelocity(m_gravity, m_floorY);
-	else
 		m_pCamera->UpdateVelocity(m_gravity, m_floorY + (m_tileScale * 2));
+	else
+		m_pCamera->UpdateVelocity(m_gravity, m_floorY);
+
+	//Dies on contact with lava
+	if (m_pCamera->GetYPos() <= m_floorY + m_tileScale)
+		m_pCamera->AddHealth(-m_pCamera->GetHealth());
 
 	//Check collisions
 	for (auto i : m_pMap->GetVectorofEnemies())
